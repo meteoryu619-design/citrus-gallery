@@ -1,0 +1,38 @@
+[
+  {
+    "id": "citrus-morning",
+    "title": "橙色早晨",
+    "description": "一只橙子被晨光切开，果汁的香气像刚写完的明信片。\n适合在窗边慢慢看，也适合收藏成今天的第一点甜。",
+    "image": "https://picsum.photos/seed/citrus1/600/800",
+    "images": [
+      "https://picsum.photos/seed/citrus1/600/800",
+      "https://picsum.photos/seed/citrus1-detail/900/600"
+    ],
+    "tags": ["橙子", "摄影", "2024"],
+    "date": "2024-03-18"
+  },
+  {
+    "id": "lemon-note",
+    "title": "柠檬手记",
+    "description": "把酸味画成边缘发亮的小太阳。\n这组插图来自一个阴天午后，颜色比天气更先开朗起来。",
+    "image": "https://picsum.photos/seed/citrus2/600/760",
+    "images": [
+      "https://picsum.photos/seed/citrus2/600/760",
+      "https://picsum.photos/seed/citrus2-sketch/700/700"
+    ],
+    "tags": ["柠檬", "插图", "2024"],
+    "date": "2024-05-02"
+  },
+  {
+    "id": "grapefruit-dream",
+    "title": "西柚梦游",
+    "description": "粉橙色的果肉像一场短途旅行，轻轻落在纸页边缘。\n想把清爽、松弛、微苦的夏天都留在这里。",
+    "image": "https://picsum.photos/seed/citrus3/600/900",
+    "images": [
+      "https://picsum.photos/seed/citrus3/600/900",
+      "https://picsum.photos/seed/citrus3-side/800/600"
+    ],
+    "tags": ["西柚", "摄影", "夏天"],
+    "date": "2024-07-21"
+  }
+]

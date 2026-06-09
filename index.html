@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Citrus 柑橘味作品集，收集摄影、插图与温暖文字。"
+    />
+    <title>Citrus 柑橘作品集</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-hero">
+      <nav class="topbar" aria-label="站点导航">
+        <a class="brand" href="index.html" aria-label="回到 Citrus 首页">Citrus</a>
+        <a class="nav-link" href="data/works.json">works.json</a>
+      </nav>
+
+      <section class="hero-copy" aria-labelledby="site-title">
+        <p class="eyebrow">fresh gallery for citrus days</p>
+        <h1 id="site-title">🍊 Citrus</h1>
+        <p class="hero-text">
+          收藏一点橙黄、一点果香，以及那些适合慢慢读的图文瞬间。
+        </p>
+      </section>
+    </header>
+
+    <main class="page-shell">
+      <section class="filter-section" aria-labelledby="filter-title">
+        <div>
+          <p class="section-kicker">Tags</p>
+          <h2 id="filter-title">按标签浏览</h2>
+        </div>
+        <div class="tag-filters" id="tagFilters" aria-label="作品标签筛选"></div>
+      </section>
+
+      <section aria-labelledby="gallery-title">
+        <div class="gallery-heading">
+          <div>
+            <p class="section-kicker">Works</p>
+            <h2 id="gallery-title">柑橘图集</h2>
+          </div>
+          <p class="result-count" id="resultCount" aria-live="polite"></p>
+        </div>
+
+        <div class="gallery" id="gallery" aria-live="polite"></div>
+        <p class="empty-state" id="emptyState" hidden>这个标签下暂时没有作品。</p>
+      </section>
+    </main>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <div class="lightbox-backdrop" data-close-lightbox></div>
+      <section
+        class="lightbox-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="lightboxTitle"
+      >
+        <button class="icon-button close-button" type="button" data-close-lightbox aria-label="关闭">
+          ×
+        </button>
+
+        <button class="arrow-button prev-button" type="button" id="prevWork" aria-label="上一张">
+          ‹
+        </button>
+        <button class="arrow-button next-button" type="button" id="nextWork" aria-label="下一张">
+          ›
+        </button>
+
+        <div class="lightbox-media">
+          <img id="lightboxImage" src="" alt="" />
+        </div>
+
+        <article class="lightbox-content">
+          <p class="section-kicker" id="lightboxDate"></p>
+          <h2 id="lightboxTitle"></h2>
+          <p id="lightboxDescription"></p>
+          <div class="lightbox-tags" id="lightboxTags"></div>
+          <div class="download-actions">
+            <button class="download-button" type="button" id="downloadSingle">下载单张</button>
+            <button class="download-button primary" type="button" id="downloadZip">打包下载</button>
+          </div>
+        </article>
+      </section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
