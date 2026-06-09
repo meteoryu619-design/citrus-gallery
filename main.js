@@ -1,7 +1,17 @@
+const categoryTabs = document.querySelector("#categoryTabs");
+const subtagTabs = document.querySelector("#subtagTabs");
 const gallery = document.querySelector("#gallery");
-const tagFilters = document.querySelector("#tagFilters");
 const resultCount = document.querySelector("#resultCount");
+const galleryMode = document.querySelector("#galleryMode");
 const emptyState = document.querySelector("#emptyState");
+
+const collectionModal = document.querySelector("#collectionModal");
+const collectionTitle = document.querySelector("#collectionTitle");
+const collectionDescription = document.querySelector("#collectionDescription");
+const collectionMeta = document.querySelector("#collectionMeta");
+const collectionTags = document.querySelector("#collectionTags");
+const collectionImages = document.querySelector("#collectionImages");
+
 const lightbox = document.querySelector("#lightbox");
 const lightboxImage = document.querySelector("#lightboxImage");
 const lightboxTitle = document.querySelector("#lightboxTitle");
@@ -9,35 +19,84 @@ const lightboxDate = document.querySelector("#lightboxDate");
 const lightboxDescription = document.querySelector("#lightboxDescription");
 const lightboxTags = document.querySelector("#lightboxTags");
 const downloadSingleButton = document.querySelector("#downloadSingle");
-const downloadZipButton = document.querySelector("#downloadZip");
+const downloadCollectionButton = document.querySelector("#downloadCollection");
+const downloadAllFromLightboxButton = document.querySelector("#downloadAllFromLightbox");
 const prevButton = document.querySelector("#prevWork");
 const nextButton = document.querySelector("#nextWork");
 
-let works = [];
-let filteredWorks = [];
-let activeTag = "全部";
-let activeIndex = 0;
+const categories = [
+  { id: "All", label: "全部", english: "All", icon: "▦" },
+  { id: "Cover", label: "封面", english: "Cover", icon: "▰" },
+  { id: "Collage", label: "拼接图", english: "Collage", icon: "▧" },
+  { id: "Wallpaper", label: "壁纸", english: "Wallpaper", icon: "▱" },
+  { id: "Daily", label: "日常番外", english: "Daily", icon: "✿" },
+  { id: "Collection", label: "收集图集", english: "Collection", icon: "▣" },
+];
+
+const subtags = {
+  Cover: ["Citrus", "Citrus+", "单画封面", "特装版", "特典封面", "杂志封面", "周年纪念"],
+  Collage: ["对视", "拥抱", "亲吻", "牵手", "依靠", "背影", "并肩"],
+  Wallpaper: ["竖屏", "横屏", "锁屏", "桌面", "高清", "4K"],
+  Daily: ["校园", "日常", "番外", "约会", "家庭", "夏天", "节日"],
+  Collection: ["官方插图", "杂志图", "宣传图", "稀有图", "网络整理"],
+};
+
+let collections = [];
+let visibleCollections = [];
+let activeCategory = "All";
+let activeSubtag = "全部";
+let activeCollection = null;
+let activeImageIndex = 0;
+let jsZipLoadPromise = null;
 
 async function initGallery() {
+  renderCategories();
+
   try {
-    const response = await fetch("data/works.json");
-    if (!response.ok) throw new Error("works.json 加载失败");
-    works = await response.json();
-    filteredWorks = [...works];
-    renderFilters();
+    const response = await fetch("data/collections.json");
+    if (!response.ok) throw new Error("collections.json 加载失败");
+    collections = await response.json();
+    renderSubtags();
     renderGallery();
   } catch (error) {
-    gallery.innerHTML = `<p class="empty-state">作品数据暂时无法加载，请检查 data/works.json。</p>`;
+    gallery.innerHTML = `
+      <p class="load-error">
+        图集数据暂时无法加载。请检查 <strong>data/collections.json</strong>，或使用
+        <strong>python3 -m http.server 8000</strong> 后访问 <strong>http://localhost:8000</strong>。
+        直接用 file:// 打开页面时，浏览器可能会限制读取本地 JSON。
+      </p>
+    `;
+    emptyState.hidden = true;
     console.error(error);
   }
 }
 
-function renderFilters() {
-  const tags = ["全部", ...new Set(works.flatMap((work) => work.tags || []))];
-  tagFilters.innerHTML = tags
+function renderCategories() {
+  categoryTabs.innerHTML = categories
+    .map(
+      (category) => `
+        <button class="category-button${category.id === activeCategory ? " is-active" : ""}" type="button" data-category="${category.id}">
+          <span class="category-icon" aria-hidden="true">${escapeHtml(category.icon)}</span>
+          <span class="category-copy">
+            <strong>${escapeHtml(category.label)}</strong>
+            <small>${escapeHtml(category.english)}</small>
+          </span>
+        </button>
+      `,
+    )
+    .join("");
+}
+
+function renderSubtags() {
+  const tags =
+    activeCategory === "All"
+      ? [...new Set(Object.values(subtags).flat())]
+      : subtags[activeCategory] || [];
+
+  subtagTabs.innerHTML = ["全部", ...tags]
     .map(
       (tag) => `
-        <button class="tag-button${tag === activeTag ? " is-active" : ""}" type="button" data-tag="${escapeHtml(tag)}">
+        <button class="subtag-button${tag === activeSubtag ? " is-active" : ""}" type="button" data-subtag="${escapeHtml(tag)}">
           ${escapeHtml(tag)}
         </button>
       `,
@@ -46,39 +105,98 @@ function renderFilters() {
 }
 
 function renderGallery() {
-  filteredWorks =
-    activeTag === "全部"
-      ? [...works]
-      : works.filter((work) => work.tags?.includes(activeTag));
+  visibleCollections = collections
+    .filter((collection) => {
+      const categoryMatch =
+        activeCategory === "All" || collection.category === activeCategory;
+      const tagMatch =
+        activeSubtag === "全部" || collection.tags?.includes(activeSubtag);
+      return categoryMatch && tagMatch;
+    })
+    .sort(sortCollections);
 
-  gallery.innerHTML = filteredWorks.map(renderCard).join("");
-  resultCount.textContent = `${filteredWorks.length} 件作品`;
-  emptyState.hidden = filteredWorks.length > 0;
+  gallery.innerHTML = visibleCollections.map(renderCollectionCard).join("");
+  resultCount.textContent = `${visibleCollections.length} 个图集`;
+  galleryMode.textContent =
+    activeCategory === "All"
+      ? "精选图集 · 最新更新 · 推荐收藏"
+      : `${getCategoryLabel(activeCategory)} · ${activeSubtag === "全部" ? "全部标签" : activeSubtag}`;
+  emptyState.hidden = visibleCollections.length > 0;
 }
 
-function renderCard(work, index) {
-  const description = work.description || "";
-  const tags = (work.tags || [])
+function sortCollections(a, b) {
+  if (activeCategory === "All" && a.featured !== b.featured) {
+    return a.featured ? -1 : 1;
+  }
+
+  return new Date(b.updatedAt) - new Date(a.updatedAt);
+}
+
+function renderCollectionCard(collection, index) {
+  const tags = (collection.tags || [])
     .map((tag) => `<span class="tag-chip">${escapeHtml(tag)}</span>`)
     .join("");
 
   return `
-    <button class="work-card" type="button" data-index="${index}" aria-label="查看 ${escapeHtml(work.title)}">
-      <img src="${escapeAttribute(work.image)}" alt="${escapeAttribute(work.title)}" loading="lazy">
-      <span class="card-body">
-        <strong class="card-title">${escapeHtml(work.title)}</strong>
-        <span class="card-description">${escapeHtml(description)}</span>
-        <span class="card-meta">
-          ${tags}
-          <span class="date-chip">${escapeHtml(formatDate(work.date))}</span>
-        </span>
-      </span>
-    </button>
+    <article class="collection-card">
+      <button class="collection-cover" type="button" data-collection-index="${index}" aria-label="查看 ${escapeHtml(collection.title)}">
+        <img src="${escapeAttribute(collection.cover)}" alt="${escapeAttribute(collection.title)}" loading="lazy">
+        ${collection.featured ? '<span class="featured-badge">精选</span>' : ""}
+      </button>
+      <div class="collection-body">
+        <div class="collection-card-top">
+          <span>${escapeHtml(getCategoryLabel(collection.category))}</span>
+          <time datetime="${escapeAttribute(collection.updatedAt)}">${escapeHtml(formatDate(collection.updatedAt))}</time>
+        </div>
+        <h3>${escapeHtml(collection.title)}</h3>
+        <p>${escapeHtml(collection.description)}</p>
+        <div class="collection-card-tags">${tags}</div>
+        <div class="collection-card-footer">
+          <span>${Number(collection.count || collection.images?.length || 0)} 张图片</span>
+          <span class="collection-card-actions">
+            <button type="button" data-collection-index="${index}">查看图集</button>
+            <button class="secondary-action" type="button" data-download-index="${index}">下载全部</button>
+          </span>
+        </div>
+      </div>
+    </article>
   `;
 }
 
-function openLightbox(index) {
-  activeIndex = index;
+function openCollection(index) {
+  activeCollection = visibleCollections[index];
+  if (!activeCollection) return;
+
+  collectionTitle.textContent = activeCollection.title;
+  collectionDescription.textContent = activeCollection.description || "";
+  collectionMeta.textContent = `${getCategoryLabel(activeCollection.category)} · ${formatDate(activeCollection.updatedAt)} · ${activeCollection.count || activeCollection.images?.length || 0} 张图片`;
+  collectionTags.innerHTML = (activeCollection.tags || [])
+    .map((tag) => `<span class="tag-chip">${escapeHtml(tag)}</span>`)
+    .join("");
+  collectionImages.innerHTML = (activeCollection.images || [])
+    .map(
+      (image, index) => `
+        <button class="collection-image-button" type="button" data-image-index="${index}" aria-label="查看第 ${index + 1} 张图片">
+          <img src="${escapeAttribute(image)}" alt="${escapeAttribute(`${activeCollection.title} ${index + 1}`)}" loading="lazy">
+        </button>
+      `,
+    )
+    .join("");
+
+  collectionModal.classList.add("is-open");
+  collectionModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("has-lightbox");
+}
+
+function closeCollection() {
+  collectionModal.classList.remove("is-open");
+  collectionModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("has-lightbox");
+}
+
+function openImage(index) {
+  if (!activeCollection) return;
+  activeImageIndex = index;
   updateLightbox();
   lightbox.classList.add("is-open");
   lightbox.setAttribute("aria-hidden", "false");
@@ -89,69 +207,101 @@ function openLightbox(index) {
 function closeLightbox() {
   lightbox.classList.remove("is-open");
   lightbox.setAttribute("aria-hidden", "true");
-  document.body.classList.remove("has-lightbox");
+  if (!collectionModal.classList.contains("is-open")) {
+    document.body.classList.remove("has-lightbox");
+  }
 }
 
 function updateLightbox() {
-  const work = filteredWorks[activeIndex];
-  if (!work) return;
+  const image = activeCollection?.images?.[activeImageIndex];
+  if (!activeCollection || !image) return;
 
-  lightboxImage.src = work.image;
-  lightboxImage.alt = work.title;
-  lightboxTitle.textContent = work.title;
-  lightboxDate.textContent = formatDate(work.date);
-  lightboxDescription.textContent = work.description || "";
-  lightboxTags.innerHTML = (work.tags || [])
+  lightboxImage.src = image;
+  lightboxImage.alt = `${activeCollection.title} ${activeImageIndex + 1}`;
+  lightboxTitle.textContent = activeCollection.title;
+  lightboxDate.textContent = `${activeImageIndex + 1} / ${activeCollection.images.length}`;
+  lightboxDescription.textContent = "手机端可长按图片保存。";
+  lightboxTags.innerHTML = (activeCollection.tags || [])
     .map((tag) => `<span class="tag-chip">${escapeHtml(tag)}</span>`)
     .join("");
 }
 
-function showRelativeWork(direction) {
-  if (!filteredWorks.length) return;
-  activeIndex = (activeIndex + direction + filteredWorks.length) % filteredWorks.length;
+function showRelativeImage(direction) {
+  if (!activeCollection?.images?.length) return;
+  activeImageIndex =
+    (activeImageIndex + direction + activeCollection.images.length) %
+    activeCollection.images.length;
   updateLightbox();
 }
 
 async function downloadSingle() {
-  const work = filteredWorks[activeIndex];
-  if (!work) return;
-  const fileName = `${safeFileName(work.title)}${getFileExtension(work.image)}`;
-  await downloadUrlAsFile(work.image, fileName);
+  const image = activeCollection?.images?.[activeImageIndex];
+  if (!image) return;
+
+  const fileName = `${safeFileName(activeCollection.title)}-${activeImageIndex + 1}${getFileExtension(image)}`;
+  try {
+    await downloadUrlAsFile(image, fileName);
+  } catch (error) {
+    alert("下载失败，请长按图片保存。");
+    console.error(error);
+  }
 }
 
-async function downloadZip() {
-  const work = filteredWorks[activeIndex];
-  if (!work) return;
-  if (!window.JSZip) {
-    alert("JSZip 没有加载成功，请检查网络后重试。");
-    return;
+async function downloadCollectionZip(collection = activeCollection, button = null) {
+  if (!collection?.images?.length) return;
+
+  const originalText = button?.textContent;
+  if (button) {
+    button.disabled = true;
+    button.textContent = "打包中…";
   }
 
-  const imageList = work.images?.length ? work.images : [work.image];
-  const zip = new JSZip();
-  const originalText = downloadZipButton.textContent;
-  downloadZipButton.disabled = true;
-  downloadZipButton.textContent = "打包中…";
-
   try {
+    const JSZipClass = await ensureJSZip();
+    const zip = new JSZipClass();
     await Promise.all(
-      imageList.map(async (imagePath, index) => {
+      collection.images.map(async (imagePath, index) => {
         const response = await fetch(imagePath);
         if (!response.ok) throw new Error(`${imagePath} 下载失败`);
         const blob = await response.blob();
-        zip.file(`${safeFileName(work.title)}-${index + 1}${getFileExtension(imagePath)}`, blob);
+        const extension = getFileExtension(imagePath);
+        zip.file(`${safeFileName(collection.title)}-${String(index + 1).padStart(2, "0")}${extension}`, blob);
       }),
     );
 
     const zipBlob = await zip.generateAsync({ type: "blob" });
-    triggerBlobDownload(zipBlob, `${safeFileName(work.title)}.zip`);
+    triggerBlobDownload(zipBlob, `${safeFileName(collection.title)}.zip`);
   } catch (error) {
-    alert("打包下载失败，请稍后再试。");
+    alert("打包下载失败，请稍后再试，也可以长按图片或右键保存单图。");
     console.error(error);
   } finally {
-    downloadZipButton.disabled = false;
-    downloadZipButton.textContent = originalText;
+    if (button) {
+      button.disabled = false;
+      button.textContent = originalText;
+    }
   }
+}
+
+function ensureJSZip() {
+  if (window.JSZip) return Promise.resolve(window.JSZip);
+
+  if (!jsZipLoadPromise) {
+    jsZipLoadPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "vendor/jszip.min.js";
+      script.onload = () => {
+        if (window.JSZip) {
+          resolve(window.JSZip);
+        } else {
+          reject(new Error("JSZip 加载后未初始化"));
+        }
+      };
+      script.onerror = () => reject(new Error("JSZip 脚本加载失败"));
+      document.head.appendChild(script);
+    });
+  }
+
+  return jsZipLoadPromise;
 }
 
 async function downloadUrlAsFile(url, fileName) {
@@ -172,6 +322,10 @@ function triggerBlobDownload(blob, fileName) {
   URL.revokeObjectURL(objectUrl);
 }
 
+function getCategoryLabel(categoryId) {
+  return categories.find((category) => category.id === categoryId)?.label || categoryId;
+}
+
 function formatDate(dateValue) {
   if (!dateValue) return "";
   return new Intl.DateTimeFormat("zh-CN", {
@@ -188,7 +342,7 @@ function getFileExtension(path) {
 }
 
 function safeFileName(value) {
-  return String(value || "citrus-work")
+  return String(value || "citrus-collection")
     .trim()
     .replace(/[\\/:*?"<>|]/g, "-")
     .replace(/\s+/g, "-");
@@ -207,34 +361,69 @@ function escapeAttribute(value) {
   return escapeHtml(value).replace(/`/g, "&#096;");
 }
 
-tagFilters.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-tag]");
+categoryTabs.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-category]");
   if (!button) return;
-  activeTag = button.dataset.tag;
-  renderFilters();
+  activeCategory = button.dataset.category;
+  activeSubtag = "全部";
+  renderCategories();
+  renderSubtags();
+  renderGallery();
+});
+
+subtagTabs.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-subtag]");
+  if (!button) return;
+  activeSubtag = button.dataset.subtag;
+  renderSubtags();
   renderGallery();
 });
 
 gallery.addEventListener("click", (event) => {
-  const card = event.target.closest("[data-index]");
-  if (!card) return;
-  openLightbox(Number(card.dataset.index));
+  const downloadButton = event.target.closest("[data-download-index]");
+  if (downloadButton) {
+    const collection = visibleCollections[Number(downloadButton.dataset.downloadIndex)];
+    downloadCollectionZip(collection, downloadButton);
+    return;
+  }
+
+  const button = event.target.closest("[data-collection-index]");
+  if (!button) return;
+  openCollection(Number(button.dataset.collectionIndex));
+});
+
+collectionModal.addEventListener("click", (event) => {
+  if (event.target.matches("[data-close-collection]")) closeCollection();
+
+  const imageButton = event.target.closest("[data-image-index]");
+  if (imageButton) openImage(Number(imageButton.dataset.imageIndex));
 });
 
 lightbox.addEventListener("click", (event) => {
   if (event.target.matches("[data-close-lightbox]")) closeLightbox();
 });
 
-prevButton.addEventListener("click", () => showRelativeWork(-1));
-nextButton.addEventListener("click", () => showRelativeWork(1));
+prevButton.addEventListener("click", () => showRelativeImage(-1));
+nextButton.addEventListener("click", () => showRelativeImage(1));
 downloadSingleButton.addEventListener("click", downloadSingle);
-downloadZipButton.addEventListener("click", downloadZip);
+downloadCollectionButton.addEventListener("click", () =>
+  downloadCollectionZip(activeCollection, downloadCollectionButton),
+);
+downloadAllFromLightboxButton.addEventListener("click", () =>
+  downloadCollectionZip(activeCollection, downloadAllFromLightboxButton),
+);
 
 document.addEventListener("keydown", (event) => {
-  if (!lightbox.classList.contains("is-open")) return;
-  if (event.key === "Escape") closeLightbox();
-  if (event.key === "ArrowLeft") showRelativeWork(-1);
-  if (event.key === "ArrowRight") showRelativeWork(1);
+  if (lightbox.classList.contains("is-open")) {
+    if (event.key === "Escape") closeLightbox();
+    if (event.key === "ArrowLeft") showRelativeImage(-1);
+    if (event.key === "ArrowRight") showRelativeImage(1);
+    return;
+  }
+
+  if (collectionModal.classList.contains("is-open") && event.key === "Escape") {
+    closeCollection();
+  }
 });
 
 initGallery();

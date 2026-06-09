@@ -1,6 +1,6 @@
 # Citrus 柑橘作品集网站
 
-一个可部署到 GitHub Pages 的纯静态作品集网站，适合展示「柑橘味」摄影、插图与文字说明。网站不需要后端，也不需要构建工具。
+一个可部署到 GitHub Pages 的纯静态图集网站，适合展示「Citrus / Citrus+」相关图片收藏。网站不需要后端，也不需要构建工具。
 
 ## 文件结构
 
@@ -10,60 +10,81 @@ citrus-gallery/
 ├── style.css
 ├── main.js
 ├── data/
-│   └── works.json
+│   └── collections.json
 ├── images/
-│   └── 图片文件放这里
+│   ├── avatar-meteor.jpg
+│   └── hero-wedding.png
+├── 图集文件夹/
+│   └── 图片文件
 └── README.md
 ```
 
 ## 日常更新流程
 
-1. 把新图片上传到 `images/` 文件夹。
-2. 在 `data/works.json` 里新增一条作品数据。
+1. 把整理好的图集文件夹拖到项目根目录，或放到你指定的图集目录中。
+2. 在 `data/collections.json` 里新增一条图集数据。
+3. 提交并推送到 GitHub。
 
-完成后网站会自动读取新数据，不需要修改 `index.html`、`style.css` 或 `main.js`。
+网站会自动读取 `collections.json`，不需要修改 `index.html`、`style.css` 或 `main.js`。
 
-## works.json 字段说明
+每个图集支持：
+
+- 查看图集内所有图片
+- 点击单图查看大图
+- 单张下载
+- 下载全部图片为 `.zip`
+
+## collections.json 字段说明
 
 ```json
 {
-  "id": "unique-id",
-  "title": "作品标题",
-  "description": "完整文字说明，支持多行",
-  "image": "images/cover.jpg",
-  "images": ["images/cover.jpg", "images/detail-1.jpg"],
-  "tags": ["橙子", "插图", "2024"],
-  "date": "2024-03-18"
+  "id": "cover-citrus-1-10",
+  "title": "citrus 历代封面 1-10",
+  "description": "整理 citrus 单行本 1-10 卷封面，适合收藏与封面美学参考。",
+  "category": "Cover",
+  "tags": ["Citrus", "单画封面"],
+  "cover": "单行本1-10拼接封面原图/截屏2026-06-06 00.53.30.png",
+  "images": [
+    "单行本1-10拼接封面原图/截屏2026-06-06 00.53.30.png",
+    "单行本1-10拼接封面原图/截屏2026-06-06 00.54.12.png"
+  ],
+  "count": 2,
+  "updatedAt": "2026-06-09",
+  "featured": true
 }
 ```
 
-- `id`：唯一标识，建议使用英文、数字和短横线。
-- `title`：作品标题。
-- `description`：作品说明，支持换行。
-- `image`：卡片封面和详情页主图路径。
-- `images`：可选，打包下载时使用的图组路径数组。如果不填，会默认打包 `image`。
-- `tags`：标签数组，用于首页筛选。
-- `date`：发布日期，格式为 `YYYY-MM-DD`。
+- `category`：一级分类，可用 `Cover`、`Collage`、`Wallpaper`、`Daily`、`Collection`。
+- `tags`：二级标签，需要和页面里的标签体系对应。
+- `cover`：图集卡片封面图。
+- `images`：图集内所有图片路径。
+- `count`：图片数量。
+- `updatedAt`：更新时间，格式为 `YYYY-MM-DD`。
+- `featured`：是否在「全部」页优先展示。
 
 ## 本地预览
 
-由于浏览器直接打开 HTML 文件时可能限制 `fetch` 读取本地 JSON，建议在项目目录启动一个简单静态服务器：
+不要直接用 `file://` 打开 `index.html` 预览，因为浏览器可能会限制读取本地 JSON，导致出现“图集数据暂时无法加载”。
+
+请在项目目录启动本地服务器：
 
 ```bash
 python3 -m http.server 8000
 ```
 
-然后访问 `http://localhost:8000`。
+然后访问：
 
-## 部署到 GitHub Pages
+```text
+http://localhost:8000
+```
 
-1. 创建名为 `citrus-gallery` 的 GitHub 仓库。
-2. 上传本项目所有文件。
-3. 在仓库页面进入 `Settings` -> `Pages`。
-4. Source 选择 `Deploy from a branch`。
-5. Branch 选择 `main` 和 `/(root)`，保存。
-6. 等待 GitHub Pages 构建完成后访问页面链接。
+## 同步到 GitHub
 
-## 说明
+```bash
+cd /Users/meteoryu/Documents/citrus图集
+git add .
+git commit -m "Update citrus gallery"
+git push origin main
+```
 
-示例数据使用 `https://picsum.photos/seed/...` 占位图，正式发布前可以替换为 `images/` 里的真实图片路径。
+推送成功后，GitHub Pages 通常会在几十秒到几分钟内更新。
