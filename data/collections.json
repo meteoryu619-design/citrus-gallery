@@ -11,7 +11,7 @@
       "images/citrus+单行本1-6封面/cover_18.png",
       "images/citrus+单行本1-6封面/cover_19.png"
     ],
-    "tags": ["citrus+", "单面封面"],
+    "tags": ["Citrus+", "特典封面"],
     "date": "2026-06-09"
   },
   {
@@ -49,7 +49,7 @@
       "images/citrus单行本1-10封面/cover_27.png",
       "images/citrus单行本1-10封面/cover_28.png"
     ],
-    "tags": ["citrus", "单面封面"],
+    "tags": ["Citrus", "单面封面"],
     "date": "2026-06-09"
   },
   {
@@ -64,7 +64,7 @@
       "images/citrus单行本拼接封面/merged_04.png",
       "images/citrus单行本拼接封面/merged_05.png"
     ],
-    "tags": ["citrus", "拼接图"],
+    "tags": ["Citrus", "拼接图"],
     "date": "2026-06-09"
   }
 ]
