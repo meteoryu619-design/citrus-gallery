@@ -24,3 +24,40 @@
 - 不需要启动本地服务器验证
 - 完成后只说已修改 X 文件，改动内容是什么
 - 不需要在终端验证 UI 效果
+# AGENTS.md
+
+## Project Context
+This is a static image gallery website for organizing and displaying Citrus-related image collections.
+
+## Core Rule
+Do not rewrite the whole project unless I explicitly ask.
+Make the smallest possible change.
+Before editing, explain which files you will change.
+
+## File Rules
+- Image paths must match the real folder and file names exactly.
+- Do not rename image files unless I ask.
+- Do not change folder structure unless I ask.
+- Prefer standard names like cover_01.png, cover_02.png, merged_01.png.
+
+## Coding Rules
+- Preserve the current visual style unless I ask for redesign.
+- Do not delete existing features.
+- Do not add large dependencies.
+- If a feature is complex, split it into small steps.
+
+## Download Feature Rule
+Do not implement full-folder ZIP download unless I explicitly ask.
+First support:
+1. image preview
+2. right click / long press save
+3. single image download button
+Only after these are stable, consider ZIP download.
+
+## After Coding
+Always tell me:
+1. What changed
+2. Which files changed
+3. How to test locally
+4. How to commit and push
+
