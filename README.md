@@ -27,13 +27,6 @@ citrus-gallery/
 
 网站会自动读取 `collections.json`，不需要修改 `index.html`、`style.css` 或 `main.js`。
 
-每个图集支持：
-
-- 查看图集内所有图片
-- 点击单图查看大图
-- 单张下载
-- 下载全部图片为 `.zip`
-
 ## collections.json 字段说明
 
 ```json

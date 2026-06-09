@@ -448,17 +448,6 @@ h1::after {
   font-size: 13px;
 }
 
-.collection-card-actions,
-.collection-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.collection-actions {
-  margin-top: 14px;
-}
-
 .collection-card-footer button {
   min-height: 36px;
   padding: 8px 12px;
@@ -468,12 +457,6 @@ h1::after {
   color: #fff;
   cursor: pointer;
   font-weight: 800;
-}
-
-.collection-card-footer .secondary-action {
-  border-color: rgba(242, 204, 169, 0.86);
-  background: #fff7e8;
-  color: var(--orange);
 }
 
 .empty-state,
@@ -654,15 +637,10 @@ h1::after {
 }
 
 .download-button.primary {
-  border-color: var(--orange);
-  background: var(--orange);
-  color: #fff;
-}
-
-.download-button:disabled,
-.collection-card-footer button:disabled {
-  cursor: progress;
-  opacity: 0.72;
+  border-color: rgba(242, 204, 169, 0.86);
+  background: #fff0d6;
+  color: var(--muted);
+  cursor: not-allowed;
 }
 
 .icon-button,

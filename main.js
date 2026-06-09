@@ -19,8 +19,6 @@ const lightboxDate = document.querySelector("#lightboxDate");
 const lightboxDescription = document.querySelector("#lightboxDescription");
 const lightboxTags = document.querySelector("#lightboxTags");
 const downloadSingleButton = document.querySelector("#downloadSingle");
-const downloadCollectionButton = document.querySelector("#downloadCollection");
-const downloadAllFromLightboxButton = document.querySelector("#downloadAllFromLightbox");
 const prevButton = document.querySelector("#prevWork");
 const nextButton = document.querySelector("#nextWork");
 
@@ -47,7 +45,6 @@ let activeCategory = "All";
 let activeSubtag = "全部";
 let activeCollection = null;
 let activeImageIndex = 0;
-let jsZipLoadPromise = null;
 
 async function initGallery() {
   renderCategories();
@@ -153,10 +150,7 @@ function renderCollectionCard(collection, index) {
         <div class="collection-card-tags">${tags}</div>
         <div class="collection-card-footer">
           <span>${Number(collection.count || collection.images?.length || 0)} 张图片</span>
-          <span class="collection-card-actions">
-            <button type="button" data-collection-index="${index}">查看图集</button>
-            <button class="secondary-action" type="button" data-download-index="${index}">下载全部</button>
-          </span>
+          <button type="button" data-collection-index="${index}">查看图集</button>
         </div>
       </div>
     </article>
@@ -247,63 +241,6 @@ async function downloadSingle() {
   }
 }
 
-async function downloadCollectionZip(collection = activeCollection, button = null) {
-  if (!collection?.images?.length) return;
-
-  const originalText = button?.textContent;
-  if (button) {
-    button.disabled = true;
-    button.textContent = "打包中…";
-  }
-
-  try {
-    const JSZipClass = await ensureJSZip();
-    const zip = new JSZipClass();
-    await Promise.all(
-      collection.images.map(async (imagePath, index) => {
-        const response = await fetch(imagePath);
-        if (!response.ok) throw new Error(`${imagePath} 下载失败`);
-        const blob = await response.blob();
-        const extension = getFileExtension(imagePath);
-        zip.file(`${safeFileName(collection.title)}-${String(index + 1).padStart(2, "0")}${extension}`, blob);
-      }),
-    );
-
-    const zipBlob = await zip.generateAsync({ type: "blob" });
-    triggerBlobDownload(zipBlob, `${safeFileName(collection.title)}.zip`);
-  } catch (error) {
-    alert("打包下载失败，请稍后再试，也可以长按图片或右键保存单图。");
-    console.error(error);
-  } finally {
-    if (button) {
-      button.disabled = false;
-      button.textContent = originalText;
-    }
-  }
-}
-
-function ensureJSZip() {
-  if (window.JSZip) return Promise.resolve(window.JSZip);
-
-  if (!jsZipLoadPromise) {
-    jsZipLoadPromise = new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.src = "vendor/jszip.min.js";
-      script.onload = () => {
-        if (window.JSZip) {
-          resolve(window.JSZip);
-        } else {
-          reject(new Error("JSZip 加载后未初始化"));
-        }
-      };
-      script.onerror = () => reject(new Error("JSZip 脚本加载失败"));
-      document.head.appendChild(script);
-    });
-  }
-
-  return jsZipLoadPromise;
-}
-
 async function downloadUrlAsFile(url, fileName) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`${url} 下载失败`);
@@ -380,13 +317,6 @@ subtagTabs.addEventListener("click", (event) => {
 });
 
 gallery.addEventListener("click", (event) => {
-  const downloadButton = event.target.closest("[data-download-index]");
-  if (downloadButton) {
-    const collection = visibleCollections[Number(downloadButton.dataset.downloadIndex)];
-    downloadCollectionZip(collection, downloadButton);
-    return;
-  }
-
   const button = event.target.closest("[data-collection-index]");
   if (!button) return;
   openCollection(Number(button.dataset.collectionIndex));
@@ -406,12 +336,6 @@ lightbox.addEventListener("click", (event) => {
 prevButton.addEventListener("click", () => showRelativeImage(-1));
 nextButton.addEventListener("click", () => showRelativeImage(1));
 downloadSingleButton.addEventListener("click", downloadSingle);
-downloadCollectionButton.addEventListener("click", () =>
-  downloadCollectionZip(activeCollection, downloadCollectionButton),
-);
-downloadAllFromLightboxButton.addEventListener("click", () =>
-  downloadCollectionZip(activeCollection, downloadAllFromLightboxButton),
-);
 
 document.addEventListener("keydown", (event) => {
   if (lightbox.classList.contains("is-open")) {
