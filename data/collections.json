@@ -3,7 +3,7 @@
     "id": "citrus-plus-1-6",
     "title": "citrus+单行本1-6封面",
     "description": "整理 citrus+ 单行本1-6卷封面图，适合封面收藏与对照查看。",
-    "coverImage": "images/citrus+单行本1-6封面/cover_01.png",
+    "cover": "images/citrus+单行本1-6封面/cover_01.png",
     "images": [
       "images/citrus+单行本1-6封面/cover_01.png",
       "images/citrus+单行本1-6封面/cover_02.png",
@@ -35,7 +35,7 @@
     "id": "citrus-1-10",
     "title": "citrus单行本1-10封面",
     "description": "收录 citrus 单行本1-10卷全封面，适合封面美学参考。",
-    "coverImage": "images/citrus单行本1-10封面/cover_01.png",
+    "cover": "images/citrus单行本1-10封面/cover_01.png",
     "images": [
       "images/citrus单行本1-10封面/cover_01.png",
       "images/citrus单行本1-10封面/cover_02.png",
@@ -76,7 +76,7 @@
     "id": "citrus-pinjie",
     "title": "citrus单行本拼接封面",
     "description": "整理单行本拼接封面成图，适合快速浏览与收藏。",
-    "coverImage": "images/citrus单行本拼接封面/merged_01.png",
+    "cover": "images/citrus单行本拼接封面/merged_01.png",
     "images": [
       "images/citrus单行本拼接封面/merged_01.png",
       "images/citrus单行本拼接封面/merged_02.png",

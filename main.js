@@ -32,7 +32,7 @@ const categories = [
 ];
 
 const subtags = {
-  Cover: ["Citrus", "Citrus+", "单画封面", "特装版", "特典封面", "杂志封面", "周年纪念"],
+  Cover: ["Citrus", "Citrus+", "单面封面", "单画封面", "特装版", "特典封面", "杂志封面", "周年纪念"],
   Collage: ["对视", "拥抱", "亲吻", "牵手", "依靠", "背影", "并肩"],
   Wallpaper: ["竖屏", "横屏", "锁屏", "桌面", "高清", "4K"],
   Daily: ["校园", "日常", "番外", "约会", "家庭", "夏天", "节日"],
@@ -52,7 +52,8 @@ async function initGallery() {
   try {
     const response = await fetch("data/collections.json");
     if (!response.ok) throw new Error("collections.json 加载失败");
-    collections = await response.json();
+    const rawCollections = await response.json();
+    collections = rawCollections.map(normalizeCollection);
     renderSubtags();
     renderGallery();
   } catch (error) {
@@ -130,6 +131,8 @@ function sortCollections(a, b) {
 }
 
 function renderCollectionCard(collection, index) {
+  const cover = collection.cover || collection.coverImage || "";
+  if (!cover) console.warn("封面加载失败", collection.id, cover);
   const tags = (collection.tags || [])
     .map((tag) => `<span class="tag-chip">${escapeHtml(tag)}</span>`)
     .join("");
@@ -137,7 +140,12 @@ function renderCollectionCard(collection, index) {
   return `
     <article class="collection-card">
       <button class="collection-cover" type="button" data-collection-index="${index}" aria-label="查看 ${escapeHtml(collection.title)}">
-        <img src="${collection.cover}" alt="${escapeAttribute(collection.title)}" loading="lazy">
+        ${
+          cover
+            ? `<img src="${escapeAttribute(cover)}" alt="${escapeAttribute(collection.title)}" loading="lazy" data-cover-id="${escapeAttribute(collection.id)}" data-cover-path="${escapeAttribute(cover)}" onerror="this.hidden=true; this.nextElementSibling.hidden=false; console.warn('封面加载失败：路径错误', this.dataset.coverId, this.dataset.coverPath);">`
+            : ""
+        }
+        <span class="cover-fallback"${cover ? " hidden" : ""}>封面加载失败：路径错误</span>
         ${collection.featured ? '<span class="featured-badge">精选</span>' : ""}
       </button>
       <div class="collection-body">
@@ -155,6 +163,49 @@ function renderCollectionCard(collection, index) {
       </div>
     </article>
   `;
+}
+
+function normalizeCollection(collection) {
+  const cover = collection.cover || collection.coverImage || "";
+  const searchableText = [
+    collection.title,
+    collection.id,
+    cover,
+    ...(collection.images || []),
+  ]
+    .join(" ")
+    .toLowerCase();
+  const tags = [...(collection.tags || [])];
+
+  appendTagIfMatched(tags, searchableText, "citrus+", "Citrus+");
+  appendTagIfMatched(tags, searchableText, "citrus", "Citrus");
+  appendTagIfMatched(tags, searchableText, "拼接", "拼接图");
+  appendTagIfMatched(tags, searchableText, "封面", "单面封面");
+  appendTagIfMatched(tags, searchableText, "特典", "特典封面");
+  appendTagIfMatched(tags, searchableText, "壁纸", "壁纸");
+  appendTagIfMatched(tags, searchableText, "竖屏", "竖屏");
+  appendTagIfMatched(tags, searchableText, "横屏", "横屏");
+
+  return {
+    ...collection,
+    cover,
+    category: collection.category || inferCategory(searchableText),
+    tags: [...new Set(tags)],
+    count: collection.count || collection.images?.length || 0,
+    updatedAt: collection.updatedAt || collection.date || "",
+  };
+}
+
+function appendTagIfMatched(tags, text, keyword, tag) {
+  if (text.includes(keyword) && !tags.includes(tag)) tags.push(tag);
+}
+
+function inferCategory(text) {
+  if (text.includes("封面")) return "Cover";
+  if (text.includes("拼接")) return "Collage";
+  if (text.includes("壁纸")) return "Wallpaper";
+  if (text.includes("番外") || text.includes("日常")) return "Daily";
+  return "Collection";
 }
 
 function openCollection(index) {
