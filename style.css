@@ -463,6 +463,11 @@ h1::after {
   font-size: 13px;
 }
 
+.card-actions {
+  display: flex;
+  gap: 8px;
+}
+
 .collection-card-footer button {
   min-height: 36px;
   padding: 8px 12px;
@@ -472,6 +477,17 @@ h1::after {
   color: #fff;
   cursor: pointer;
   font-weight: 800;
+}
+
+.collection-card-footer .secondary-action {
+  background: #fff7e8;
+  color: var(--orange);
+}
+
+.collection-card-footer button:disabled,
+.image-download-button:disabled {
+  cursor: progress;
+  opacity: 0.72;
 }
 
 .empty-state,
@@ -570,11 +586,19 @@ h1::after {
   gap: 12px;
 }
 
+.collection-image-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: #ffe8bd;
+}
+
 .collection-image-button {
+  width: 100%;
   padding: 0;
   overflow: hidden;
   border: 0;
-  border-radius: var(--radius);
+  border-radius: inherit;
   background: #ffe8bd;
   cursor: zoom-in;
 }
@@ -584,6 +608,22 @@ h1::after {
   aspect-ratio: 1 / 1;
   display: block;
   object-fit: cover;
+}
+
+.image-download-button {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  min-height: 32px;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 140, 0, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 253, 248, 0.92);
+  color: var(--orange);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 8px 18px rgba(126, 77, 30, 0.14);
 }
 
 .download-hint {

@@ -105,10 +105,9 @@ function renderSubtags() {
 function renderGallery() {
   visibleCollections = collections
     .filter((collection) => {
-      const categoryMatch =
-        activeCategory === "All" || collection.category === activeCategory;
+      const categoryMatch = matchesActiveCategory(collection);
       const tagMatch =
-        activeSubtag === "全部" || collection.tags?.includes(activeSubtag);
+        activeSubtag === "全部" || matchesCollectionText(collection, activeSubtag);
       return categoryMatch && tagMatch;
     })
     .sort(sortCollections);
@@ -146,7 +145,7 @@ function renderCollectionCard(collection, index) {
             : ""
         }
         <span class="cover-fallback"${cover ? " hidden" : ""}>封面加载失败：路径错误</span>
-        ${collection.featured ? '<span class="featured-badge">精选</span>' : ""}
+        <span class="featured-badge">精选</span>
       </button>
       <div class="collection-body">
         <div class="collection-card-top">
@@ -158,7 +157,10 @@ function renderCollectionCard(collection, index) {
         <div class="collection-card-tags">${tags}</div>
         <div class="collection-card-footer">
           <span>${Number(collection.count || collection.images?.length || 0)} 张图片</span>
-          <button type="button" data-collection-index="${index}">查看图集</button>
+          <div class="card-actions">
+            <button type="button" data-collection-index="${index}">查看图集</button>
+            <button class="secondary-action" type="button" data-download-collection-index="${index}">下载图集</button>
+          </div>
         </div>
       </div>
     </article>
@@ -201,11 +203,71 @@ function appendTagIfMatched(tags, text, keyword, tag) {
 }
 
 function inferCategory(text) {
-  if (text.includes("封面")) return "Cover";
   if (text.includes("拼接")) return "Collage";
+  if (text.includes("封面")) return "Cover";
   if (text.includes("壁纸")) return "Wallpaper";
   if (text.includes("番外") || text.includes("日常")) return "Daily";
   return "Collection";
+}
+
+function getSearchableText(collection) {
+  return [
+    collection.title,
+    collection.id,
+    collection.cover,
+    collection.coverImage,
+    ...(collection.tags || []),
+    ...(collection.images || []),
+  ]
+    .join(" ")
+    .toLowerCase();
+}
+
+function matchesCollectionText(collection, keyword) {
+  if (!keyword || keyword === "全部") return true;
+  const tags = collection.tags || [];
+  if (tags.includes(keyword)) return true;
+
+  const text = getSearchableText(collection);
+  const normalizedKeyword = keyword.toLowerCase();
+  if (text.includes(normalizedKeyword)) return true;
+
+  const aliases = {
+    拼接图: ["拼接"],
+    特典封面: ["特典"],
+    单行本封面: ["单行本"],
+    单面封面: ["单行本", "封面"],
+    封面: ["封面"],
+  };
+
+  return (aliases[keyword] || []).some((alias) => text.includes(alias.toLowerCase()));
+}
+
+function matchesActiveCategory(collection) {
+  if (activeCategory === "All") return true;
+  if (collection.category === activeCategory) return true;
+
+  const text = getSearchableText(collection);
+  const tags = collection.tags || [];
+
+  const categoryMatchers = {
+    Cover: () =>
+      tags.some((tag) => ["单行本封面", "单面封面", "单画封面", "特典封面", "杂志封面"].includes(tag)) ||
+      text.includes("封面") ||
+      text.includes("单行本") ||
+      text.includes("特典"),
+    Collage: () => tags.includes("拼接图") || text.includes("拼接"),
+    Wallpaper: () => tags.includes("壁纸") || text.includes("壁纸") || text.includes("竖屏") || text.includes("横屏"),
+    Daily: () => tags.some((tag) => ["日常", "番外", "校园", "约会"].includes(tag)) || text.includes("日常") || text.includes("番外"),
+    Collection: () =>
+      tags.some((tag) => ["官方插图", "杂志图", "宣传图", "稀有图", "网络整理"].includes(tag)) ||
+      text.includes("官方") ||
+      text.includes("杂志") ||
+      text.includes("宣传") ||
+      text.includes("稀有"),
+  };
+
+  return categoryMatchers[activeCategory]?.() || false;
 }
 
 function openCollection(index) {
@@ -221,9 +283,12 @@ function openCollection(index) {
   collectionImages.innerHTML = (activeCollection.images || [])
     .map(
       (image, index) => `
-        <button class="collection-image-button" type="button" data-image-index="${index}" aria-label="查看第 ${index + 1} 张图片">
-          <img src="${escapeAttribute(image)}" alt="${escapeAttribute(`${activeCollection.title} ${index + 1}`)}" loading="lazy">
-        </button>
+        <div class="collection-image-item">
+          <button class="collection-image-button" type="button" data-image-index="${index}" aria-label="查看第 ${index + 1} 张图片">
+            <img src="${escapeAttribute(image)}" alt="${escapeAttribute(`${activeCollection.title} ${index + 1}`)}" loading="lazy">
+          </button>
+          <button class="image-download-button" type="button" data-download-image-index="${index}">下载</button>
+        </div>
       `,
     )
     .join("");
@@ -292,6 +357,58 @@ async function downloadSingle() {
   }
 }
 
+async function downloadCollection(index, triggerButton) {
+  const collection = visibleCollections[index];
+  const images = collection?.images || [];
+  if (!collection || !images.length) return;
+
+  const originalText = triggerButton?.textContent;
+  if (triggerButton) {
+    triggerButton.disabled = true;
+    triggerButton.textContent = "下载中…";
+  }
+
+  try {
+    for (const [imageIndex, image] of images.entries()) {
+      const fileName = `${safeFileName(collection.title)}-${imageIndex + 1}${getFileExtension(image)}`;
+      await downloadUrlAsFile(image, fileName);
+      await wait(250);
+    }
+  } catch (error) {
+    alert("图集下载中断，请打开图集后单张保存。");
+    console.error(error);
+  } finally {
+    if (triggerButton) {
+      triggerButton.disabled = false;
+      triggerButton.textContent = originalText || "下载图集";
+    }
+  }
+}
+
+async function downloadCollectionImage(index, triggerButton) {
+  const image = activeCollection?.images?.[index];
+  if (!activeCollection || !image) return;
+
+  const originalText = triggerButton?.textContent;
+  if (triggerButton) {
+    triggerButton.disabled = true;
+    triggerButton.textContent = "下载中";
+  }
+
+  try {
+    const fileName = `${safeFileName(activeCollection.title)}-${index + 1}${getFileExtension(image)}`;
+    await downloadUrlAsFile(image, fileName);
+  } catch (error) {
+    alert("下载失败，请右键或长按图片保存。");
+    console.error(error);
+  } finally {
+    if (triggerButton) {
+      triggerButton.disabled = false;
+      triggerButton.textContent = originalText || "下载";
+    }
+  }
+}
+
 async function downloadUrlAsFile(url, fileName) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`${url} 下载失败`);
@@ -308,6 +425,10 @@ function triggerBlobDownload(blob, fileName) {
   link.click();
   link.remove();
   URL.revokeObjectURL(objectUrl);
+}
+
+function wait(duration) {
+  return new Promise((resolve) => setTimeout(resolve, duration));
 }
 
 function getCategoryLabel(categoryId) {
@@ -368,6 +489,12 @@ subtagTabs.addEventListener("click", (event) => {
 });
 
 gallery.addEventListener("click", (event) => {
+  const downloadButton = event.target.closest("[data-download-collection-index]");
+  if (downloadButton) {
+    downloadCollection(Number(downloadButton.dataset.downloadCollectionIndex), downloadButton);
+    return;
+  }
+
   const button = event.target.closest("[data-collection-index]");
   if (!button) return;
   openCollection(Number(button.dataset.collectionIndex));
@@ -378,6 +505,9 @@ collectionModal.addEventListener("click", (event) => {
 
   const imageButton = event.target.closest("[data-image-index]");
   if (imageButton) openImage(Number(imageButton.dataset.imageIndex));
+
+  const downloadButton = event.target.closest("[data-download-image-index]");
+  if (downloadButton) downloadCollectionImage(Number(downloadButton.dataset.downloadImageIndex), downloadButton);
 });
 
 lightbox.addEventListener("click", (event) => {
