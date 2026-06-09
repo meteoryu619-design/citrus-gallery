@@ -11,12 +11,15 @@
       "images/citrus+单行本1-6封面/cover_18.png",
       "images/citrus+单行本1-6封面/cover_19.png"
     ],
-    "tags": ["Citrus+", "特典封面"],
+    "tags": [
+      "Citrus+",
+      "特典封面"
+    ],
     "date": "2026-06-09"
   },
   {
     "id": "citrus-1-10",
-    "title": "citrus 单行本1-10封面",
+    "title": "citrus单行本1-10封面",
     "description": "收录 citrus 单行本1-10卷全封面，适合封面美学参考。",
     "coverImage": "images/citrus单行本1-10封面/cover_01.png",
     "images": [
@@ -49,7 +52,10 @@
       "images/citrus单行本1-10封面/cover_27.png",
       "images/citrus单行本1-10封面/cover_28.png"
     ],
-    "tags": ["Citrus", "单面封面"],
+    "tags": [
+      "Citrus",
+      "单面封面"
+    ],
     "date": "2026-06-09"
   },
   {
@@ -64,7 +70,10 @@
       "images/citrus单行本拼接封面/merged_04.png",
       "images/citrus单行本拼接封面/merged_05.png"
     ],
-    "tags": ["Citrus", "拼接图"],
+    "tags": [
+      "Citrus",
+      "拼接图"
+    ],
     "date": "2026-06-09"
   }
 ]
