@@ -486,7 +486,7 @@ h1::after {
 
 .collection-card-footer button:disabled,
 .image-download-button:disabled {
-  cursor: progress;
+  cursor: not-allowed;
   opacity: 0.72;
 }
 
@@ -624,6 +624,17 @@ h1::after {
   font-size: 12px;
   font-weight: 800;
   box-shadow: 0 8px 18px rgba(126, 77, 30, 0.14);
+}
+
+.load-more-images {
+  grid-column: 1 / -1;
+  min-height: 44px;
+  border: 1px solid rgba(255, 140, 0, 0.28);
+  border-radius: var(--radius);
+  background: #fff7e8;
+  color: var(--orange);
+  cursor: pointer;
+  font-weight: 800;
 }
 
 .download-hint {
@@ -831,7 +842,7 @@ body.has-lightbox {
 
   .collection-grid,
   .collection-images {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .collection-modal,
