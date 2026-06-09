@@ -137,7 +137,7 @@ function renderCollectionCard(collection, index) {
   return `
     <article class="collection-card">
       <button class="collection-cover" type="button" data-collection-index="${index}" aria-label="查看 ${escapeHtml(collection.title)}">
-        <img src="${escapeAttribute(collection.cover)}" alt="${escapeAttribute(collection.title)}" loading="lazy">
+        <img src="${collection.cover}" alt="${escapeAttribute(collection.title)}" loading="lazy">
         ${collection.featured ? '<span class="featured-badge">精选</span>' : ""}
       </button>
       <div class="collection-body">
