@@ -420,30 +420,26 @@ async function downloadCollection(collection, triggerButton) {
   const originalText = triggerButton?.textContent;
   if (triggerButton) {
     triggerButton.disabled = true;
-    triggerButton.textContent = "打包中";
   }
 
   try {
-    const JSZip = await loadJSZip();
-    const zip = new JSZip();
+    for (let index = 0; index < downloads.length; index += 1) {
+      const downloadSrc = getDownloadSrc(collection, index);
+      if (!downloadSrc) continue;
 
-    await Promise.all(
-      downloads.map(async (download, index) => {
-        const downloadSrc = getDownloadSrc(collection, index);
-        if (!downloadSrc) return;
+      if (triggerButton) {
+        triggerButton.textContent = `下载中 ${index + 1}/${downloads.length}...`;
+      }
 
-        const response = await fetch(downloadSrc);
-        if (!response.ok) throw new Error(`${downloadSrc} 下载失败`);
+      const fileName = `${safeFileName(collection.title)}-${index + 1}${getFileExtension(downloadSrc)}`;
+      triggerUrlDownload(downloadSrc, fileName);
 
-        const fileName = `${safeFileName(collection.title)}-${index + 1}${getFileExtension(downloadSrc)}`;
-        zip.file(fileName, await response.blob());
-      }),
-    );
-
-    const blob = await zip.generateAsync({ type: "blob" });
-    triggerBlobDownload(blob, `${safeFileName(collection.title)}.zip`);
+      if (index < downloads.length - 1) {
+        await wait(800);
+      }
+    }
   } catch (error) {
-    alert("打包下载失败，请先尝试单张下载。");
+    alert("下载失败，请先尝试单张下载。");
     console.error(error);
   } finally {
     if (triggerButton) {
@@ -458,25 +454,6 @@ function prepareDownloadAllButton() {
   downloadAllButton.disabled = false;
   downloadAllButton.textContent = "下载全部";
   downloadAllButton.addEventListener("click", () => downloadCollection(activeCollection, downloadAllButton));
-}
-
-function loadJSZip() {
-  if (window.JSZip) return Promise.resolve(window.JSZip);
-
-  return new Promise((resolve, reject) => {
-    const existingScript = document.querySelector('script[src="./vendor/jszip.min.js"]');
-    if (existingScript) {
-      existingScript.addEventListener("load", () => resolve(window.JSZip));
-      existingScript.addEventListener("error", reject);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = "./vendor/jszip.min.js";
-    script.onload = () => resolve(window.JSZip);
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
 }
 
 function getImageThumb(image) {
@@ -509,6 +486,21 @@ function triggerBlobDownload(blob, fileName) {
   link.click();
   link.remove();
   URL.revokeObjectURL(objectUrl);
+}
+
+function triggerUrlDownload(url, fileName) {
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+function wait(ms) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
 }
 
 function getCategoryLabel(categoryId) {
