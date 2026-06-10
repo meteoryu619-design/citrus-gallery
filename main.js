@@ -19,6 +19,7 @@ const lightboxDate = document.querySelector("#lightboxDate");
 const lightboxDescription = document.querySelector("#lightboxDescription");
 const lightboxTags = document.querySelector("#lightboxTags");
 const downloadSingleButton = document.querySelector("#downloadSingle");
+const downloadAllButton = document.querySelector(".download-actions .download-button.primary");
 const prevButton = document.querySelector("#prevWork");
 const nextButton = document.querySelector("#nextWork");
 const IMAGE_BATCH_SIZE = 12;
@@ -50,6 +51,7 @@ let visibleCollectionImageCount = IMAGE_BATCH_SIZE;
 
 async function initGallery() {
   renderCategories();
+  prepareDownloadAllButton();
 
   try {
     const response = await fetch("data/collections.json");
@@ -161,7 +163,7 @@ function renderCollectionCard(collection, index) {
           <span>${Number(collection.count || collection.images?.length || 0)} 张图片</span>
           <div class="card-actions">
             <button type="button" data-collection-index="${index}">查看图集</button>
-            <button class="secondary-action" type="button" disabled title="下载全部后续开放">下载图集</button>
+            <button class="secondary-action" type="button" data-download-collection-index="${index}">下载图集</button>
           </div>
         </div>
       </div>
@@ -375,13 +377,12 @@ function showRelativeImage(direction) {
 }
 
 async function downloadSingle() {
-  const image = activeCollection?.images?.[activeImageIndex];
-  const imageSrc = getImageSrc(image);
-  if (!imageSrc) return;
+  const downloadSrc = getDownloadSrc(activeCollection, activeImageIndex);
+  if (!downloadSrc) return;
 
-  const fileName = `${safeFileName(activeCollection.title)}-${activeImageIndex + 1}${getFileExtension(imageSrc)}`;
+  const fileName = `${safeFileName(activeCollection.title)}-${activeImageIndex + 1}${getFileExtension(downloadSrc)}`;
   try {
-    await downloadUrlAsFile(imageSrc, fileName);
+    await downloadUrlAsFile(downloadSrc, fileName);
   } catch (error) {
     alert("下载失败，请长按图片保存。");
     console.error(error);
@@ -389,9 +390,8 @@ async function downloadSingle() {
 }
 
 async function downloadCollectionImage(index, triggerButton) {
-  const image = activeCollection?.images?.[index];
-  const imageSrc = getImageSrc(image);
-  if (!activeCollection || !imageSrc) return;
+  const downloadSrc = getDownloadSrc(activeCollection, index);
+  if (!activeCollection || !downloadSrc) return;
 
   const originalText = triggerButton?.textContent;
   if (triggerButton) {
@@ -400,8 +400,8 @@ async function downloadCollectionImage(index, triggerButton) {
   }
 
   try {
-    const fileName = `${safeFileName(activeCollection.title)}-${index + 1}${getFileExtension(imageSrc)}`;
-    await downloadUrlAsFile(imageSrc, fileName);
+    const fileName = `${safeFileName(activeCollection.title)}-${index + 1}${getFileExtension(downloadSrc)}`;
+    await downloadUrlAsFile(downloadSrc, fileName);
   } catch (error) {
     alert("下载失败，请右键或长按图片保存。");
     console.error(error);
@@ -413,12 +413,84 @@ async function downloadCollectionImage(index, triggerButton) {
   }
 }
 
+async function downloadCollection(collection, triggerButton) {
+  const downloads = collection?.downloads || [];
+  if (!collection || !downloads.length) return;
+
+  const originalText = triggerButton?.textContent;
+  if (triggerButton) {
+    triggerButton.disabled = true;
+    triggerButton.textContent = "打包中";
+  }
+
+  try {
+    const JSZip = await loadJSZip();
+    const zip = new JSZip();
+
+    await Promise.all(
+      downloads.map(async (download, index) => {
+        const downloadSrc = getDownloadSrc(collection, index);
+        if (!downloadSrc) return;
+
+        const response = await fetch(downloadSrc);
+        if (!response.ok) throw new Error(`${downloadSrc} 下载失败`);
+
+        const fileName = `${safeFileName(collection.title)}-${index + 1}${getFileExtension(downloadSrc)}`;
+        zip.file(fileName, await response.blob());
+      }),
+    );
+
+    const blob = await zip.generateAsync({ type: "blob" });
+    triggerBlobDownload(blob, `${safeFileName(collection.title)}.zip`);
+  } catch (error) {
+    alert("打包下载失败，请先尝试单张下载。");
+    console.error(error);
+  } finally {
+    if (triggerButton) {
+      triggerButton.disabled = false;
+      triggerButton.textContent = originalText || "下载图集";
+    }
+  }
+}
+
+function prepareDownloadAllButton() {
+  if (!downloadAllButton) return;
+  downloadAllButton.disabled = false;
+  downloadAllButton.textContent = "下载全部";
+  downloadAllButton.addEventListener("click", () => downloadCollection(activeCollection, downloadAllButton));
+}
+
+function loadJSZip() {
+  if (window.JSZip) return Promise.resolve(window.JSZip);
+
+  return new Promise((resolve, reject) => {
+    const existingScript = document.querySelector('script[src="./vendor/jszip.min.js"]');
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve(window.JSZip));
+      existingScript.addEventListener("error", reject);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "./vendor/jszip.min.js";
+    script.onload = () => resolve(window.JSZip);
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
 function getImageThumb(image) {
   return typeof image === "string" ? image : image?.thumb || image?.src || "";
 }
 
 function getImageSrc(image) {
   return typeof image === "string" ? image : image?.src || image?.original || image?.thumb || "";
+}
+
+function getDownloadSrc(collection, index) {
+  const download = collection?.downloads?.[index];
+  if (typeof download === "string") return download;
+  return download?.src || download?.original || "";
 }
 
 async function downloadUrlAsFile(url, fileName) {
@@ -497,6 +569,13 @@ subtagTabs.addEventListener("click", (event) => {
 });
 
 gallery.addEventListener("click", (event) => {
+  const downloadButton = event.target.closest("[data-download-collection-index]");
+  if (downloadButton) {
+    const collection = visibleCollections[Number(downloadButton.dataset.downloadCollectionIndex)];
+    downloadCollection(collection, downloadButton);
+    return;
+  }
+
   const button = event.target.closest("[data-collection-index]");
   if (!button) return;
   openCollection(Number(button.dataset.collectionIndex));
