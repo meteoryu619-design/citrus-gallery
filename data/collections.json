@@ -3,84 +3,48 @@
     "id": "citrus-plus-1-6",
     "title": "citrus+单行本1-6封面",
     "description": "整理 citrus+ 单行本1-6卷封面图，适合封面收藏与对照查看。",
-    "cover": "images/thumbs/citrus+单行本1-6封面/cover_01.jpg",
+    "coverImage": "images/citrus+单行本1-6封面_web/cover_01.jpg",
     "images": [
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_01.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_01.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_02.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_02.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_03.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_03.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_04.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_04.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_05.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_05.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_06.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_06.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_07.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_07.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_08.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_08.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_09.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_09.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_10.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_10.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_11.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_11.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_12.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_12.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_13.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_13.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_14.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_14.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_15.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_15.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_16.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_16.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_17.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_17.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_18.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_18.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus+单行本1-6封面/cover_19.jpg",
-        "src": "images/citrus+单行本1-6封面/cover_19.png"
-      }
+      "images/citrus+单行本1-6封面_web/cover_01.jpg",
+      "images/citrus+单行本1-6封面_web/cover_02.jpg",
+      "images/citrus+单行本1-6封面_web/cover_03.jpg",
+      "images/citrus+单行本1-6封面_web/cover_04.jpg",
+      "images/citrus+单行本1-6封面_web/cover_05.jpg",
+      "images/citrus+单行本1-6封面_web/cover_06.jpg",
+      "images/citrus+单行本1-6封面_web/cover_07.jpg",
+      "images/citrus+单行本1-6封面_web/cover_08.jpg",
+      "images/citrus+单行本1-6封面_web/cover_09.jpg",
+      "images/citrus+单行本1-6封面_web/cover_10.jpg",
+      "images/citrus+单行本1-6封面_web/cover_11.jpg",
+      "images/citrus+单行本1-6封面_web/cover_12.jpg",
+      "images/citrus+单行本1-6封面_web/cover_13.jpg",
+      "images/citrus+单行本1-6封面_web/cover_14.jpg",
+      "images/citrus+单行本1-6封面_web/cover_15.jpg",
+      "images/citrus+单行本1-6封面_web/cover_16.jpg",
+      "images/citrus+单行本1-6封面_web/cover_17.jpg",
+      "images/citrus+单行本1-6封面_web/cover_18.jpg",
+      "images/citrus+单行本1-6封面_web/cover_19.jpg"
+    ],
+    "downloads": [
+      "images/citrus+单行本1-6封面/cover_01.png",
+      "images/citrus+单行本1-6封面/cover_02.png",
+      "images/citrus+单行本1-6封面/cover_03.png",
+      "images/citrus+单行本1-6封面/cover_04.png",
+      "images/citrus+单行本1-6封面/cover_05.png",
+      "images/citrus+单行本1-6封面/cover_06.png",
+      "images/citrus+单行本1-6封面/cover_07.png",
+      "images/citrus+单行本1-6封面/cover_08.png",
+      "images/citrus+单行本1-6封面/cover_09.png",
+      "images/citrus+单行本1-6封面/cover_10.png",
+      "images/citrus+单行本1-6封面/cover_11.png",
+      "images/citrus+单行本1-6封面/cover_12.png",
+      "images/citrus+单行本1-6封面/cover_13.png",
+      "images/citrus+单行本1-6封面/cover_14.png",
+      "images/citrus+单行本1-6封面/cover_15.png",
+      "images/citrus+单行本1-6封面/cover_16.png",
+      "images/citrus+单行本1-6封面/cover_17.png",
+      "images/citrus+单行本1-6封面/cover_18.png",
+      "images/citrus+单行本1-6封面/cover_19.png"
     ],
     "tags": [
       "Citrus+",
@@ -92,120 +56,66 @@
     "id": "citrus-1-10",
     "title": "citrus单行本1-10封面",
     "description": "收录 citrus 单行本1-10卷全封面，适合封面美学参考。",
-    "cover": "images/thumbs/citrus单行本1-10封面/cover_01.jpg",
+    "coverImage": "images/citrus单行本1-10封面_web/cover_01.jpg",
     "images": [
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_01.jpg",
-        "src": "images/citrus单行本1-10封面/cover_01.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_02.jpg",
-        "src": "images/citrus单行本1-10封面/cover_02.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_03.jpg",
-        "src": "images/citrus单行本1-10封面/cover_03.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_04.jpg",
-        "src": "images/citrus单行本1-10封面/cover_04.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_05.jpg",
-        "src": "images/citrus单行本1-10封面/cover_05.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_06.jpg",
-        "src": "images/citrus单行本1-10封面/cover_06.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_07.jpg",
-        "src": "images/citrus单行本1-10封面/cover_07.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_08.jpg",
-        "src": "images/citrus单行本1-10封面/cover_08.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_09.jpg",
-        "src": "images/citrus单行本1-10封面/cover_09.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_10.jpg",
-        "src": "images/citrus单行本1-10封面/cover_10.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_11.jpg",
-        "src": "images/citrus单行本1-10封面/cover_11.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_12.jpg",
-        "src": "images/citrus单行本1-10封面/cover_12.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_13.jpg",
-        "src": "images/citrus单行本1-10封面/cover_13.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_14.jpg",
-        "src": "images/citrus单行本1-10封面/cover_14.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_15.jpg",
-        "src": "images/citrus单行本1-10封面/cover_15.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_16.jpg",
-        "src": "images/citrus单行本1-10封面/cover_16.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_17.jpg",
-        "src": "images/citrus单行本1-10封面/cover_17.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_18.jpg",
-        "src": "images/citrus单行本1-10封面/cover_18.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_19.jpg",
-        "src": "images/citrus单行本1-10封面/cover_19.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_20.jpg",
-        "src": "images/citrus单行本1-10封面/cover_20.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_21.jpg",
-        "src": "images/citrus单行本1-10封面/cover_21.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_22.jpg",
-        "src": "images/citrus单行本1-10封面/cover_22.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_23.jpg",
-        "src": "images/citrus单行本1-10封面/cover_23.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_24.jpg",
-        "src": "images/citrus单行本1-10封面/cover_24.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_25.jpg",
-        "src": "images/citrus单行本1-10封面/cover_25.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_26.jpg",
-        "src": "images/citrus单行本1-10封面/cover_26.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_27.jpg",
-        "src": "images/citrus单行本1-10封面/cover_27.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本1-10封面/cover_28.jpg",
-        "src": "images/citrus单行本1-10封面/cover_28.png"
-      }
+      "images/citrus单行本1-10封面_web/cover_01.jpg",
+      "images/citrus单行本1-10封面_web/cover_02.jpg",
+      "images/citrus单行本1-10封面_web/cover_03.jpg",
+      "images/citrus单行本1-10封面_web/cover_04.jpg",
+      "images/citrus单行本1-10封面_web/cover_05.jpg",
+      "images/citrus单行本1-10封面_web/cover_06.jpg",
+      "images/citrus单行本1-10封面_web/cover_07.jpg",
+      "images/citrus单行本1-10封面_web/cover_08.jpg",
+      "images/citrus单行本1-10封面_web/cover_09.jpg",
+      "images/citrus单行本1-10封面_web/cover_10.jpg",
+      "images/citrus单行本1-10封面_web/cover_11.jpg",
+      "images/citrus单行本1-10封面_web/cover_12.jpg",
+      "images/citrus单行本1-10封面_web/cover_13.jpg",
+      "images/citrus单行本1-10封面_web/cover_14.jpg",
+      "images/citrus单行本1-10封面_web/cover_15.jpg",
+      "images/citrus单行本1-10封面_web/cover_16.jpg",
+      "images/citrus单行本1-10封面_web/cover_17.jpg",
+      "images/citrus单行本1-10封面_web/cover_18.jpg",
+      "images/citrus单行本1-10封面_web/cover_19.jpg",
+      "images/citrus单行本1-10封面_web/cover_20.jpg",
+      "images/citrus单行本1-10封面_web/cover_21.jpg",
+      "images/citrus单行本1-10封面_web/cover_22.jpg",
+      "images/citrus单行本1-10封面_web/cover_23.jpg",
+      "images/citrus单行本1-10封面_web/cover_24.jpg",
+      "images/citrus单行本1-10封面_web/cover_25.jpg",
+      "images/citrus单行本1-10封面_web/cover_26.jpg",
+      "images/citrus单行本1-10封面_web/cover_27.jpg",
+      "images/citrus单行本1-10封面_web/cover_28.jpg"
+    ],
+    "downloads": [
+      "images/citrus单行本1-10封面/cover_01.png",
+      "images/citrus单行本1-10封面/cover_02.png",
+      "images/citrus单行本1-10封面/cover_03.png",
+      "images/citrus单行本1-10封面/cover_04.png",
+      "images/citrus单行本1-10封面/cover_05.png",
+      "images/citrus单行本1-10封面/cover_06.png",
+      "images/citrus单行本1-10封面/cover_07.png",
+      "images/citrus单行本1-10封面/cover_08.png",
+      "images/citrus单行本1-10封面/cover_09.png",
+      "images/citrus单行本1-10封面/cover_10.png",
+      "images/citrus单行本1-10封面/cover_11.png",
+      "images/citrus单行本1-10封面/cover_12.png",
+      "images/citrus单行本1-10封面/cover_13.png",
+      "images/citrus单行本1-10封面/cover_14.png",
+      "images/citrus单行本1-10封面/cover_15.png",
+      "images/citrus单行本1-10封面/cover_16.png",
+      "images/citrus单行本1-10封面/cover_17.png",
+      "images/citrus单行本1-10封面/cover_18.png",
+      "images/citrus单行本1-10封面/cover_19.png",
+      "images/citrus单行本1-10封面/cover_20.png",
+      "images/citrus单行本1-10封面/cover_21.png",
+      "images/citrus单行本1-10封面/cover_22.png",
+      "images/citrus单行本1-10封面/cover_23.png",
+      "images/citrus单行本1-10封面/cover_24.png",
+      "images/citrus单行本1-10封面/cover_25.png",
+      "images/citrus单行本1-10封面/cover_26.png",
+      "images/citrus单行本1-10封面/cover_27.png",
+      "images/citrus单行本1-10封面/cover_28.png"
     ],
     "tags": [
       "Citrus",
@@ -217,28 +127,20 @@
     "id": "citrus-pinjie",
     "title": "citrus单行本拼接封面",
     "description": "整理单行本拼接封面成图，适合快速浏览与收藏。",
-    "cover": "images/thumbs/citrus单行本拼接封面/merged_01.jpg",
+    "coverImage": "images/citrus单行本拼接封面_web/merged_01.jpg",
     "images": [
-      {
-        "thumb": "images/thumbs/citrus单行本拼接封面/merged_01.jpg",
-        "src": "images/citrus单行本拼接封面/merged_01.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本拼接封面/merged_02.jpg",
-        "src": "images/citrus单行本拼接封面/merged_02.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本拼接封面/merged_03.jpg",
-        "src": "images/citrus单行本拼接封面/merged_03.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本拼接封面/merged_04.jpg",
-        "src": "images/citrus单行本拼接封面/merged_04.png"
-      },
-      {
-        "thumb": "images/thumbs/citrus单行本拼接封面/merged_05.jpg",
-        "src": "images/citrus单行本拼接封面/merged_05.png"
-      }
+      "images/citrus单行本拼接封面_web/merged_01.jpg",
+      "images/citrus单行本拼接封面_web/merged_02.jpg",
+      "images/citrus单行本拼接封面_web/merged_03.jpg",
+      "images/citrus单行本拼接封面_web/merged_04.jpg",
+      "images/citrus单行本拼接封面_web/merged_05.jpg"
+    ],
+    "downloads": [
+      "images/citrus单行本拼接封面/merged_01.png",
+      "images/citrus单行本拼接封面/merged_02.png",
+      "images/citrus单行本拼接封面/merged_03.png",
+      "images/citrus单行本拼接封面/merged_04.png",
+      "images/citrus单行本拼接封面/merged_05.png"
     ],
     "tags": [
       "Citrus",
