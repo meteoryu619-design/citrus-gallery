@@ -420,26 +420,32 @@ async function downloadCollection(collection, triggerButton) {
   const originalText = triggerButton?.textContent;
   if (triggerButton) {
     triggerButton.disabled = true;
+    triggerButton.textContent = `打包中 0/${downloads.length}...`;
   }
 
   try {
+    const JSZip = await loadJSZip();
+    const zip = new JSZip();
+
     for (let index = 0; index < downloads.length; index += 1) {
       const downloadSrc = getDownloadSrc(collection, index);
       if (!downloadSrc) continue;
 
-      if (triggerButton) {
-        triggerButton.textContent = `下载中 ${index + 1}/${downloads.length}...`;
-      }
+      const response = await fetch(downloadSrc);
+      if (!response.ok) throw new Error(`${downloadSrc} 下载失败`);
 
       const fileName = `${safeFileName(collection.title)}-${index + 1}${getFileExtension(downloadSrc)}`;
-      triggerUrlDownload(downloadSrc, fileName);
+      zip.file(fileName, await response.blob());
 
-      if (index < downloads.length - 1) {
-        await wait(800);
+      if (triggerButton) {
+        triggerButton.textContent = `打包中 ${index + 1}/${downloads.length}...`;
       }
     }
+
+    const blob = await zip.generateAsync({ type: "blob" });
+    await triggerBlobDownload(blob, `${safeFileName(collection.title)}.zip`);
   } catch (error) {
-    alert("下载失败，请先尝试单张下载。");
+    alert("下载失败，请重试");
     console.error(error);
   } finally {
     if (triggerButton) {
@@ -454,6 +460,13 @@ function prepareDownloadAllButton() {
   downloadAllButton.disabled = false;
   downloadAllButton.textContent = "下载全部";
   downloadAllButton.addEventListener("click", () => downloadCollection(activeCollection, downloadAllButton));
+}
+
+async function loadJSZip() {
+  if (window.JSZip) return window.JSZip;
+
+  const jszipModule = await import("./vendor/jszip.min.js");
+  return window.JSZip || jszipModule.default || jszipModule.JSZip;
 }
 
 function getImageThumb(image) {
@@ -474,32 +487,23 @@ async function downloadUrlAsFile(url, fileName) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`${url} 下载失败`);
   const blob = await response.blob();
-  triggerBlobDownload(blob, fileName);
+  await triggerBlobDownload(blob, fileName);
 }
 
 function triggerBlobDownload(blob, fileName) {
-  const objectUrl = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = objectUrl;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(objectUrl);
-}
-
-function triggerUrlDownload(url, fileName) {
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-}
-
-function wait(ms) {
   return new Promise((resolve) => {
-    window.setTimeout(resolve, ms);
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+
+    window.setTimeout(() => {
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(objectUrl);
+      resolve();
+    }, 100);
   });
 }
 
