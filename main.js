@@ -480,7 +480,12 @@ function getImageSrc(image) {
 function getDownloadSrc(collection, index) {
   const download = collection?.downloads?.[index];
   if (typeof download === "string") return download;
-  return download?.src || download?.original || "";
+  if (download?.src || download?.original) return download.src || download.original;
+
+  // 回退到 images 字段
+  const image = collection?.images?.[index];
+  if (typeof image === "string") return image;
+  return image?.src || image?.original || image?.thumb || "";
 }
 
 async function downloadUrlAsFile(url, fileName) {
