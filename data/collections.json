@@ -1,5 +1,28 @@
 [
   {
+    "id": "daily-afterword-01",
+    "title": "日常后记01",
+    "description": "整理 citrus+ 后记与情人节相关日常图，方便预览与单张保存。",
+    "coverImage": "images/日常后记01/citrus_valentine_part1_hd.png",
+    "images": [
+      "images/日常后记01/citrus_valentine_part1_hd.png",
+      "images/日常后记01/citrus_valentine_part2_hd.png",
+      "images/日常后记01/citrus_plus_vol4_afterwards_hd.png"
+    ],
+    "downloads": [
+      "images/日常后记01/citrus_valentine_part1_hd.png",
+      "images/日常后记01/citrus_valentine_part2_hd.png",
+      "images/日常后记01/citrus_plus_vol4_afterwards_hd.png"
+    ],
+    "tags": [
+      "Citrus+",
+      "日常",
+      "后记",
+      "情人节"
+    ],
+    "date": "2026-06-18"
+  },
+  {
     "id": "vertical-wallpaper-01",
     "title": "竖屏壁纸01",
     "description": "整理一组适合手机竖屏使用的 citrus 壁纸图，方便预览与单张保存。",
