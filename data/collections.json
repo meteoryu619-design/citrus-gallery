@@ -1,5 +1,25 @@
 [
   {
+    "id": "daily-afterword-02",
+    "title": "日常后记02",
+    "description": "整理 citrus 日常后记图，方便预览与单张保存。",
+    "coverImage": "images/日常后记02/citrus_22_clear.png",
+    "images": [
+      "images/日常后记02/citrus_22_clear.png",
+      "images/日常后记02/citrus_22_clear_副本.png"
+    ],
+    "downloads": [
+      "images/日常后记02/citrus_22_clear.png",
+      "images/日常后记02/citrus_22_clear_副本.png"
+    ],
+    "tags": [
+      "Citrus",
+      "日常",
+      "后记"
+    ],
+    "date": "2026-06-27"
+  },
+  {
     "id": "anime-limited-cover-promo",
     "title": "动画限定封面宣传",
     "description": "整理 citrus 动画 Blu-ray & DVD 限定封面宣传图，方便预览与单张保存。",
