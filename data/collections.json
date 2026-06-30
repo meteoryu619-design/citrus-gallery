@@ -1,5 +1,23 @@
 [
   {
+    "id": "vertical-wallpaper-02",
+    "title": "竖屏壁纸02",
+    "description": "整理适合手机竖屏使用的 citrus 壁纸图，方便预览与单张保存。",
+    "coverImage": "images/竖屏壁纸02/image.png",
+    "images": [
+      "images/竖屏壁纸02/image.png"
+    ],
+    "downloads": [
+      "images/竖屏壁纸02/image.png"
+    ],
+    "tags": [
+      "Citrus",
+      "壁纸",
+      "竖屏"
+    ],
+    "date": "2026-06-30"
+  },
+  {
     "id": "daily-afterword-02",
     "title": "日常后记02",
     "description": "整理 citrus 日常后记图，方便预览与单张保存。",
@@ -74,26 +92,10 @@
     "coverImage": "images/竖屏壁纸01/image01.png",
     "images": [
       "images/竖屏壁纸01/image01.png",
-      "images/竖屏壁纸01/image02.png",
-      "images/竖屏壁纸01/image03.png",
-      "images/竖屏壁纸01/image04.png",
-      "images/竖屏壁纸01/image05.jpg",
-      "images/竖屏壁纸01/image06.png",
-      "images/竖屏壁纸01/image07.jpg",
-      "images/竖屏壁纸01/image08.png",
-      "images/竖屏壁纸01/image09..png",
       "images/竖屏壁纸01/image10.jpg"
     ],
     "downloads": [
       "images/竖屏壁纸01/image01.png",
-      "images/竖屏壁纸01/image02.png",
-      "images/竖屏壁纸01/image03.png",
-      "images/竖屏壁纸01/image04.png",
-      "images/竖屏壁纸01/image05.jpg",
-      "images/竖屏壁纸01/image06.png",
-      "images/竖屏壁纸01/image07.jpg",
-      "images/竖屏壁纸01/image08.png",
-      "images/竖屏壁纸01/image09..png",
       "images/竖屏壁纸01/image10.jpg"
     ],
     "tags": [
