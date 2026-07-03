@@ -1,20 +1,20 @@
 [
   {
     "id": "bonus-booklet-01",
-    "title": "特典小册子01",
+    "title": "特典小册子日常01",
     "description": "整理 citrus 特典小册子图片，方便预览与单张保存。",
-    "coverImage": "images/特典小册子01/image01.png",
+    "coverImage": "images/特典小册子日常01/image01.png",
     "images": [
-      "images/特典小册子01/image01.png",
-      "images/特典小册子01/image02.png",
-      "images/特典小册子01/image03.png",
-      "images/特典小册子01/image04.png"
+      "images/特典小册子日常01/image01.png",
+      "images/特典小册子日常01/image02.png",
+      "images/特典小册子日常01/image03.png",
+      "images/特典小册子日常01/image04.png"
     ],
     "downloads": [
-      "images/特典小册子01/image01.png",
-      "images/特典小册子01/image02.png",
-      "images/特典小册子01/image03.png",
-      "images/特典小册子01/image04.png"
+      "images/特典小册子日常01/image01.png",
+      "images/特典小册子日常01/image02.png",
+      "images/特典小册子日常01/image03.png",
+      "images/特典小册子日常01/image04.png"
     ],
     "tags": [
       "日常",
