@@ -3,16 +3,16 @@
     "id": "meimei",
     "title": "MEIMEI",
     "description": "整理 citrus+ 芽衣主题特典图，方便预览与单张保存。",
-    "coverImage": "images/MEIMEI/Citrus_Plus_vol.1_Animate_extra.webp",
+    "coverImage": "images/MEIMEI/Citrus_Plus_vol.2_Animate_extra-2.webp",
     "images": [
-      "images/MEIMEI/Citrus_Plus_vol.1_Animate_extra.webp",
       "images/MEIMEI/Citrus_Plus_vol.2_Animate_extra-2.webp",
-      "images/MEIMEI/Citrus_Plus_vol.3_Animate_extra-3.webp"
+      "images/MEIMEI/Citrus_Plus_vol.3_Animate_extra-3.webp",
+      "images/MEIMEI/Citrus_Plus_vol.4_Animate_extra.webp"
     ],
     "downloads": [
-      "images/MEIMEI/Citrus_Plus_vol.1_Animate_extra.webp",
       "images/MEIMEI/Citrus_Plus_vol.2_Animate_extra-2.webp",
-      "images/MEIMEI/Citrus_Plus_vol.3_Animate_extra-3.webp"
+      "images/MEIMEI/Citrus_Plus_vol.3_Animate_extra-3.webp",
+      "images/MEIMEI/Citrus_Plus_vol.4_Animate_extra.webp"
     ],
     "tags": [
       "芽衣"
