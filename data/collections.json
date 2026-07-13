@@ -1,5 +1,31 @@
 [
   {
+    "id": "mei-yuzu-daily",
+    "title": "小芽柚",
+    "description": "整理芽衣与柚子的日常主题图片，方便预览与单张保存。",
+    "coverImage": "images/小芽柚/Citrus_Plus_vol.1_Toranoana.webp",
+    "images": [
+      "images/小芽柚/Citrus_Plus_vol.1_Toranoana.webp",
+      "images/小芽柚/Citrus_Plus_vol.2_Toranoana-2.webp",
+      "images/小芽柚/mei-yuzu-past-and-present.webp",
+      "images/小芽柚/questions-yuzu-mei.webp",
+      "images/小芽柚/Thanks_from_saburo_Uta.webp"
+    ],
+    "downloads": [
+      "images/小芽柚/Citrus_Plus_vol.1_Toranoana.webp",
+      "images/小芽柚/Citrus_Plus_vol.2_Toranoana-2.webp",
+      "images/小芽柚/mei-yuzu-past-and-present.webp",
+      "images/小芽柚/questions-yuzu-mei.webp",
+      "images/小芽柚/Thanks_from_saburo_Uta.webp"
+    ],
+    "tags": [
+      "芽衣",
+      "柚子",
+      "日常"
+    ],
+    "date": "2026-07-13"
+  },
+  {
     "id": "meimei",
     "title": "MEIMEI",
     "description": "整理 citrus+ 芽衣主题特典图，方便预览与单张保存。",
