@@ -1,5 +1,37 @@
 [
   {
+    "id": "leaflet-covers",
+    "title": "特典小册子封面",
+    "description": "整理 citrus 与 citrus+ 第 4～9 卷相关特典小册子封面，方便预览与单张保存。",
+    "coverImage": "images/leaflet/leaflet_01.webp",
+    "images": [
+      "images/leaflet/leaflet_01.webp",
+      "images/leaflet/leaflet_02.webp",
+      "images/leaflet/leaflet_03.webp",
+      "images/leaflet/leaflet_04.webp",
+      "images/leaflet/leaflet_05.webp",
+      "images/leaflet/leaflet_06.webp",
+      "images/leaflet/leaflet_07.webp",
+      "images/leaflet/leaflet_08.png"
+    ],
+    "downloads": [
+      "images/leaflet/leaflet_01.webp",
+      "images/leaflet/leaflet_02.webp",
+      "images/leaflet/leaflet_03.webp",
+      "images/leaflet/leaflet_04.webp",
+      "images/leaflet/leaflet_05.webp",
+      "images/leaflet/leaflet_06.webp",
+      "images/leaflet/leaflet_07.webp",
+      "images/leaflet/leaflet_08.png"
+    ],
+    "tags": [
+      "Citrus",
+      "Citrus+",
+      "特典封面"
+    ],
+    "date": "2026-07-26"
+  },
+  {
     "id": "mei-yuzu-daily",
     "title": "小芽柚",
     "description": "整理芽衣与柚子的日常主题图片，方便预览与单张保存。",
