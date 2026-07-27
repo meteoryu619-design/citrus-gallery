@@ -22,7 +22,7 @@ const downloadSingleButton = document.querySelector("#downloadSingle");
 const downloadAllButton = document.querySelector(".download-actions .download-button.primary");
 const prevButton = document.querySelector("#prevWork");
 const nextButton = document.querySelector("#nextWork");
-const IMAGE_BATCH_SIZE = 12;
+const IMAGE_BATCH_SIZE = window.matchMedia("(max-width: 720px)").matches ? 6 : 12;
 
 const categories = [
   { id: "All", label: "全部", english: "All", icon: "▦" },
@@ -135,6 +135,7 @@ function sortCollections(a, b) {
 
 function renderCollectionCard(collection, index) {
   const cover = collection.cover || collection.coverImage || collection.images?.[0]?.thumb || collection.images?.[0]?.src || "";
+  const coverThumb = getImageThumb(cover);
   if (!cover) console.warn("封面加载失败", collection.id, cover);
   const tags = (collection.tags || [])
     .map((tag) => `<span class="tag-chip">${escapeHtml(tag)}</span>`)
@@ -145,7 +146,7 @@ function renderCollectionCard(collection, index) {
       <button class="collection-cover" type="button" data-collection-index="${index}" aria-label="查看 ${escapeHtml(collection.title)}">
         ${
           cover
-            ? `<img src="${escapeAttribute(cover)}" alt="${escapeAttribute(collection.title)}" loading="lazy" decoding="async" data-cover-id="${escapeAttribute(collection.id)}" data-cover-path="${escapeAttribute(cover)}" onerror="this.hidden=true; this.nextElementSibling.hidden=false; console.warn('封面加载失败：路径错误', this.dataset.coverId, this.dataset.coverPath);">`
+            ? `<img src="${escapeAttribute(coverThumb)}" alt="${escapeAttribute(collection.title)}" loading="lazy" decoding="async" fetchpriority="low" data-cover-id="${escapeAttribute(collection.id)}" data-cover-path="${escapeAttribute(coverThumb)}" onerror="this.hidden=true; this.nextElementSibling.hidden=false; console.warn('封面加载失败：路径错误', this.dataset.coverId, this.dataset.coverPath);">`
             : ""
         }
         <span class="cover-fallback"${cover ? " hidden" : ""}>封面加载失败：路径错误</span>
@@ -317,7 +318,7 @@ function renderCollectionImages() {
       (image, index) => `
         <div class="collection-image-item">
           <button class="collection-image-button" type="button" data-image-index="${index}" aria-label="查看第 ${index + 1} 张图片">
-            <img src="${escapeAttribute(getImageThumb(image))}" alt="${escapeAttribute(`${activeCollection.title} ${index + 1}`)}" loading="lazy" decoding="async">
+            <img src="${escapeAttribute(getImageThumb(image))}" alt="${escapeAttribute(`${activeCollection.title} ${index + 1}`)}" loading="lazy" decoding="async" fetchpriority="low">
           </button>
           <button class="image-download-button" type="button" data-download-image-index="${index}">下载</button>
         </div>
@@ -470,7 +471,14 @@ async function loadJSZip() {
 }
 
 function getImageThumb(image) {
-  return typeof image === "string" ? image : image?.thumb || image?.src || "";
+  const source = typeof image === "string" ? image : image?.thumb || image?.src || "";
+  if (!source.startsWith("images/")) return source;
+
+  const relativePath = source
+    .slice("images/".length)
+    .replace(/_web\//, "/")
+    .replace(/\.[^.\/]+$/, ".jpg");
+  return `images/thumbs/${relativePath}`;
 }
 
 function getImageSrc(image) {

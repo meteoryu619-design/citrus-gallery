@@ -1,5 +1,37 @@
 [
   {
+    "id": "line-manga-promo",
+    "title": "LINE Manga 平台宣传图",
+    "description": "整理 LINE Manga 平台发布的 citrus 角色与节日宣传图，方便预览与单张保存。",
+    "coverImage": "images/LINE Manga 平台宣传图/Yuzu_x_Mei_X-mas.webp",
+    "images": [
+      "images/LINE Manga 平台宣传图/Yuzu_x_Mei_X-mas.webp",
+      "images/LINE Manga 平台宣传图/Citrus_new_year.webp",
+      "images/LINE Manga 平台宣传图/Yuzu_on_saburo_uta_twitter_page.webp",
+      "images/LINE Manga 平台宣传图/Mei_on_saburo_uta_twitter_page.webp",
+      "images/LINE Manga 平台宣传图/Harumi_on_saburo_uta_twitter_page.webp",
+      "images/LINE Manga 平台宣传图/Himeko_on_saburo_uta_twitter_page.webp",
+      "images/LINE Manga 平台宣传图/Matsuri_on_saburo_uta_twitter_page.webp",
+      "images/LINE Manga 平台宣传图/Sara_%26_Nina_on_saburo_uta_twitter_page.webp"
+    ],
+    "downloads": [
+      "images/LINE Manga 平台宣传图/Yuzu_x_Mei_X-mas.webp",
+      "images/LINE Manga 平台宣传图/Citrus_new_year.webp",
+      "images/LINE Manga 平台宣传图/Yuzu_on_saburo_uta_twitter_page.webp",
+      "images/LINE Manga 平台宣传图/Mei_on_saburo_uta_twitter_page.webp",
+      "images/LINE Manga 平台宣传图/Harumi_on_saburo_uta_twitter_page.webp",
+      "images/LINE Manga 平台宣传图/Himeko_on_saburo_uta_twitter_page.webp",
+      "images/LINE Manga 平台宣传图/Matsuri_on_saburo_uta_twitter_page.webp",
+      "images/LINE Manga 平台宣传图/Sara_%26_Nina_on_saburo_uta_twitter_page.webp"
+    ],
+    "tags": [
+      "Citrus",
+      "宣传图",
+      "官方插图"
+    ],
+    "date": "2026-07-27"
+  },
+  {
     "id": "leaflet-covers",
     "title": "特典小册子封面",
     "description": "整理 citrus 与 citrus+ 第 4～9 卷相关特典小册子封面，方便预览与单张保存。",
