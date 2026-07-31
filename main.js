@@ -22,7 +22,7 @@ const downloadSingleButton = document.querySelector("#downloadSingle");
 const downloadAllButton = document.querySelector(".download-actions .download-button.primary");
 const prevButton = document.querySelector("#prevWork");
 const nextButton = document.querySelector("#nextWork");
-const IMAGE_BATCH_SIZE = window.matchMedia("(max-width: 720px)").matches ? 6 : 12;
+const IMAGE_BATCH_SIZE = window.matchMedia("(max-width: 720px)").matches ? 12 : 20;
 
 const categories = [
   { id: "All", label: "全部", english: "All", icon: "▦" },

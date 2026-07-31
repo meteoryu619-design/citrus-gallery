@@ -582,8 +582,8 @@ h1::after {
 
 .collection-images {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
 }
 
 .collection-image-item {
@@ -777,7 +777,7 @@ body.has-lightbox {
   }
 
   .collection-images {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .lightbox-panel {
@@ -842,7 +842,7 @@ body.has-lightbox {
 
   .collection-grid,
   .collection-images {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .collection-modal,
