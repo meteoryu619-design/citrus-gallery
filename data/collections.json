@@ -1,5 +1,35 @@
 [
   {
+    "id": "nene-gallery",
+    "title": "宁音图集",
+    "description": "整理宁音相关角色图与 citrus 插图，方便集中预览与单张保存。",
+    "coverImage": "images/宁音/Nene_full.webp",
+    "images": [
+      "images/宁音/Nene_full.webp",
+      "images/宁音/Nene_Nomura.webp",
+      "images/宁音/Nene_blonde.webp",
+      "images/宁音/Citrus-Christmas-2020.webp",
+      "images/宁音/HaruYuzu_ship_sunk.webp",
+      "images/宁音/D4DDA8CAEC4E4EC007851911C44BC907.png",
+      "images/宁音/image.png"
+    ],
+    "downloads": [
+      "images/宁音/Nene_full.webp",
+      "images/宁音/Nene_Nomura.webp",
+      "images/宁音/Nene_blonde.webp",
+      "images/宁音/Citrus-Christmas-2020.webp",
+      "images/宁音/HaruYuzu_ship_sunk.webp",
+      "images/宁音/D4DDA8CAEC4E4EC007851911C44BC907.png",
+      "images/宁音/image.png"
+    ],
+    "tags": [
+      "Citrus",
+      "宁音",
+      "角色图"
+    ],
+    "date": "2026-08-06"
+  },
+  {
     "id": "past-gallery-master",
     "title": "过往图集总合集",
     "description": "整理过往发布的 citrus 图文图片，方便集中预览、查找与单张保存。",
@@ -342,7 +372,7 @@
       "images/LINE Manga 平台宣传图/Harumi_on_saburo_uta_twitter_page.webp",
       "images/LINE Manga 平台宣传图/Himeko_on_saburo_uta_twitter_page.webp",
       "images/LINE Manga 平台宣传图/Matsuri_on_saburo_uta_twitter_page.webp",
-      "images/LINE Manga 平台宣传图/Sara_%26_Nina_on_saburo_uta_twitter_page.webp"
+      "images/LINE Manga 平台宣传图/Sara_%2526_Nina_on_saburo_uta_twitter_page.webp"
     ],
     "downloads": [
       "images/LINE Manga 平台宣传图/Yuzu_x_Mei_X-mas.webp",
@@ -352,7 +382,7 @@
       "images/LINE Manga 平台宣传图/Harumi_on_saburo_uta_twitter_page.webp",
       "images/LINE Manga 平台宣传图/Himeko_on_saburo_uta_twitter_page.webp",
       "images/LINE Manga 平台宣传图/Matsuri_on_saburo_uta_twitter_page.webp",
-      "images/LINE Manga 平台宣传图/Sara_%26_Nina_on_saburo_uta_twitter_page.webp"
+      "images/LINE Manga 平台宣传图/Sara_%2526_Nina_on_saburo_uta_twitter_page.webp"
     ],
     "tags": [
       "Citrus",
