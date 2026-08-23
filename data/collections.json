@@ -1,5 +1,22 @@
 [
   {
+    "id": "wedding-gallery",
+    "title": "结婚合集",
+    "description": "收录 citrus 结婚主题图片，方便集中预览与单张保存。",
+    "coverImage": "images/结婚合集/01weding.png",
+    "images": [
+      "images/结婚合集/01weding.png"
+    ],
+    "downloads": [
+      "images/结婚合集/01weding.png"
+    ],
+    "tags": [
+      "Citrus",
+      "结婚"
+    ],
+    "date": "2026-08-23"
+  },
+  {
     "id": "nene-gallery",
     "title": "宁音图集",
     "description": "整理宁音相关角色图与 citrus 插图，方便集中预览与单张保存。",
@@ -372,7 +389,7 @@
       "images/LINE Manga 平台宣传图/Harumi_on_saburo_uta_twitter_page.webp",
       "images/LINE Manga 平台宣传图/Himeko_on_saburo_uta_twitter_page.webp",
       "images/LINE Manga 平台宣传图/Matsuri_on_saburo_uta_twitter_page.webp",
-      "images/LINE Manga 平台宣传图/Sara_%2526_Nina_on_saburo_uta_twitter_page.webp"
+      "images/LINE Manga 平台宣传图/Sara_%26_Nina_on_saburo_uta_twitter_page.webp"
     ],
     "downloads": [
       "images/LINE Manga 平台宣传图/Yuzu_x_Mei_X-mas.webp",
@@ -382,7 +399,7 @@
       "images/LINE Manga 平台宣传图/Harumi_on_saburo_uta_twitter_page.webp",
       "images/LINE Manga 平台宣传图/Himeko_on_saburo_uta_twitter_page.webp",
       "images/LINE Manga 平台宣传图/Matsuri_on_saburo_uta_twitter_page.webp",
-      "images/LINE Manga 平台宣传图/Sara_%2526_Nina_on_saburo_uta_twitter_page.webp"
+      "images/LINE Manga 平台宣传图/Sara_%26_Nina_on_saburo_uta_twitter_page.webp"
     ],
     "tags": [
       "Citrus",
