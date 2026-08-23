@@ -146,7 +146,7 @@ function renderCollectionCard(collection, index) {
       <button class="collection-cover" type="button" data-collection-index="${index}" aria-label="查看 ${escapeHtml(collection.title)}">
         ${
           cover
-            ? `<img src="${escapeAttribute(coverThumb)}" alt="${escapeAttribute(collection.title)}" loading="lazy" decoding="async" fetchpriority="low" data-cover-id="${escapeAttribute(collection.id)}" data-cover-path="${escapeAttribute(coverThumb)}" onerror="this.hidden=true; this.nextElementSibling.hidden=false; console.warn('封面加载失败：路径错误', this.dataset.coverId, this.dataset.coverPath);">`
+            ? `<img src="${escapeAttribute(coverThumb)}" alt="${escapeAttribute(collection.title)}" loading="lazy" decoding="async" fetchpriority="low" data-cover-id="${escapeAttribute(collection.id)}" data-cover-path="${escapeAttribute(coverThumb)}" data-cover-original="${escapeAttribute(cover)}" onerror="if (!this.dataset.originalTried && this.dataset.coverOriginal !== this.src) { this.dataset.originalTried = 'true'; this.src = this.dataset.coverOriginal; } else { this.hidden = true; this.nextElementSibling.hidden = false; console.warn('封面加载失败：路径错误', this.dataset.coverId, this.dataset.coverPath); }">`
             : ""
         }
         <span class="cover-fallback"${cover ? " hidden" : ""}>封面加载失败：路径错误</span>
