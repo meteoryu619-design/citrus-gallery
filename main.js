@@ -318,7 +318,7 @@ function renderCollectionImages() {
       (image, index) => `
         <div class="collection-image-item">
           <button class="collection-image-button" type="button" data-image-index="${index}" aria-label="查看第 ${index + 1} 张图片">
-            <img src="${escapeAttribute(getImageThumb(image))}" alt="${escapeAttribute(`${activeCollection.title} ${index + 1}`)}" loading="lazy" decoding="async" fetchpriority="low">
+            <img src="${escapeAttribute(getImageThumb(image))}" alt="${escapeAttribute(`${activeCollection.title} ${index + 1}`)}" loading="lazy" decoding="async" fetchpriority="low" data-original="${escapeAttribute(getImageSrc(image))}" onerror="if (!this.dataset.originalTried) { this.dataset.originalTried = 'true'; this.src = this.dataset.original; }">
           </button>
           <button class="image-download-button" type="button" data-download-image-index="${index}">下载</button>
         </div>
