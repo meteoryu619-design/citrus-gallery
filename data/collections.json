@@ -1,5 +1,28 @@
 [
   {
+    "id": "meteoryu-gallery",
+    "title": "meteoryu 图集",
+    "description": "收录 meteoryu 的 citrus 主题图片，方便集中预览与单张保存。",
+    "coverImage": "images/meteoryu/双人编发_竖屏_最终版_手写水印.png",
+    "images": [
+      "images/meteoryu/citrus_芽衣_雪景无狗_签名_无名指戒指_局部修正版.png",
+      "images/meteoryu/双人编发_竖屏_最终版_手写水印.png",
+      "images/meteoryu/江南.png",
+      "images/meteoryu/系列基准_芽衣_桃色姐妹_网点黑白_v1_签名_肩旁.png"
+    ],
+    "downloads": [
+      "images/meteoryu/citrus_芽衣_雪景无狗_签名_无名指戒指_局部修正版.png",
+      "images/meteoryu/双人编发_竖屏_最终版_手写水印.png",
+      "images/meteoryu/江南.png",
+      "images/meteoryu/系列基准_芽衣_桃色姐妹_网点黑白_v1_签名_肩旁.png"
+    ],
+    "tags": [
+      "Citrus",
+      "meteoryu"
+    ],
+    "date": "2026-10-03"
+  },
+  {
     "id": "mei-birthday-0913",
     "title": "芽衣生日图0913",
     "description": "收录芽衣生日主题图片，方便集中预览与单张保存。",
