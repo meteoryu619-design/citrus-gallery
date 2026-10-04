@@ -49,6 +49,7 @@ let activeCollection = null;
 let activeImageIndex = 0;
 let visibleCollectionImageCount = IMAGE_BATCH_SIZE;
 let collectionDownloadInProgress = false;
+const pendingImageDownloads = new Map();
 
 async function initGallery() {
   renderCategories();
@@ -308,26 +309,37 @@ function openCollection(index) {
   document.body.classList.add("has-lightbox");
 }
 
-function renderCollectionImages() {
+function renderCollectionImages(reset = true) {
   const images = activeCollection?.images || [];
-  const visibleImages = images.slice(0, visibleCollectionImageCount);
+  const startIndex = reset ? 0 : collectionImages.querySelectorAll(".collection-image-item").length;
+  const visibleImages = images.slice(startIndex, visibleCollectionImageCount);
   const hasMore = visibleCollectionImageCount < images.length;
 
-  collectionImages.innerHTML = visibleImages
+  const markup = visibleImages
     .map(
-      (image, index) => `
+      (image, offset) => {
+        const index = startIndex + offset;
+        return `
         <div class="collection-image-item">
           <button class="collection-image-button" type="button" data-image-index="${index}" aria-label="查看第 ${index + 1} 张图片">
             <img src="${escapeAttribute(getImageThumb(image))}" alt="${escapeAttribute(`${activeCollection.title} ${index + 1}`)}" loading="lazy" decoding="async" fetchpriority="low" data-original="${escapeAttribute(getImageSrc(image))}" onerror="if (!this.dataset.originalTried) { this.dataset.originalTried = 'true'; this.src = this.dataset.original; }">
           </button>
           <button class="image-download-button" type="button" data-download-image-index="${index}">下载</button>
         </div>
-      `,
+      `;
+      },
     )
     .join("") +
     (hasMore
       ? `<button class="load-more-images" type="button" data-load-more-images>加载更多</button>`
       : "");
+
+  if (reset) {
+    collectionImages.innerHTML = markup;
+  } else {
+    collectionImages.querySelector("[data-load-more-images]")?.remove();
+    collectionImages.insertAdjacentHTML("beforeend", markup);
+  }
 }
 
 function closeCollection() {
@@ -398,6 +410,7 @@ async function downloadSingle() {
 }
 
 async function downloadCollectionImage(index, triggerButton) {
+  if (triggerButton?.disabled) return;
   const downloadSrc = getDownloadSrc(activeCollection, index);
   if (!activeCollection || !downloadSrc) return;
 
@@ -506,10 +519,20 @@ function getDownloadSrc(collection, index) {
 }
 
 async function downloadUrlAsFile(url, fileName) {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`${url} 下载失败`);
-  const blob = await response.blob();
-  await triggerBlobDownload(blob, fileName);
+  if (pendingImageDownloads.has(url)) return pendingImageDownloads.get(url);
+
+  const download = (async () => {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`${url} 下载失败`);
+    const blob = await response.blob();
+    await triggerBlobDownload(blob, fileName);
+  })();
+  pendingImageDownloads.set(url, download);
+  try {
+    await download;
+  } finally {
+    pendingImageDownloads.delete(url);
+  }
 }
 
 function triggerBlobDownload(blob, fileName) {
@@ -613,7 +636,7 @@ collectionModal.addEventListener("click", (event) => {
 
   if (event.target.closest("[data-load-more-images]")) {
     visibleCollectionImageCount += IMAGE_BATCH_SIZE;
-    renderCollectionImages();
+    renderCollectionImages(false);
     return;
   }
 

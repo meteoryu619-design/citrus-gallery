@@ -59,5 +59,10 @@ Always tell me:
 1. What changed
 2. Which files changed
 3. How to test locally
-4. How to commit and push
+4. Commit and push status
 
+## 优化后的自动提交
+- 每次完成网站优化并通过必要验证后，直接执行 Git 提交，不再询问是否提交。
+- 只暂存本次任务修改的文件，保留用户已有的无关改动，不使用 `git add .`。
+- 推送按用户明确授权执行；“直接提交”本身不代表自动推送。
+- 完成后简要报告修改内容、验证结果和提交状态。
