@@ -48,6 +48,7 @@ let activeSubtag = "全部";
 let activeCollection = null;
 let activeImageIndex = 0;
 let visibleCollectionImageCount = IMAGE_BATCH_SIZE;
+let collectionDownloadInProgress = false;
 
 async function initGallery() {
   renderCategories();
@@ -63,9 +64,8 @@ async function initGallery() {
   } catch (error) {
     gallery.innerHTML = `
       <p class="load-error">
-        图集数据暂时无法加载。请检查 <strong>data/collections.json</strong>，或使用
-        <strong>python3 -m http.server 8000</strong> 后访问 <strong>http://localhost:8000</strong>。
-        直接用 file:// 打开页面时，浏览器可能会限制读取本地 JSON。
+        图集暂时无法加载，请检查网络连接后重试。
+        <button type="button" data-retry-gallery>重新加载</button>
       </p>
     `;
     emptyState.hidden = true;
@@ -378,15 +378,22 @@ function showRelativeImage(direction) {
 }
 
 async function downloadSingle() {
+  if (downloadSingleButton.disabled) return;
   const downloadSrc = getDownloadSrc(activeCollection, activeImageIndex);
   if (!downloadSrc) return;
 
   const fileName = `${safeFileName(activeCollection.title)}-${activeImageIndex + 1}${getFileExtension(downloadSrc)}`;
+  const originalText = downloadSingleButton.textContent;
+  downloadSingleButton.disabled = true;
+  downloadSingleButton.textContent = "下载中";
   try {
     await downloadUrlAsFile(downloadSrc, fileName);
   } catch (error) {
     alert("下载失败，请长按图片保存。");
     console.error(error);
+  } finally {
+    downloadSingleButton.disabled = false;
+    downloadSingleButton.textContent = originalText;
   }
 }
 
@@ -416,8 +423,9 @@ async function downloadCollectionImage(index, triggerButton) {
 
 async function downloadCollection(collection, triggerButton) {
   const downloads = collection?.downloads || [];
-  if (!collection || !downloads.length) return;
+  if (!collection || !downloads.length || collectionDownloadInProgress) return;
 
+  collectionDownloadInProgress = true;
   const originalText = triggerButton?.textContent;
   if (triggerButton) {
     triggerButton.disabled = true;
@@ -449,6 +457,7 @@ async function downloadCollection(collection, triggerButton) {
     alert("下载失败，请重试");
     console.error(error);
   } finally {
+    collectionDownloadInProgress = false;
     if (triggerButton) {
       triggerButton.disabled = false;
       triggerButton.textContent = originalText || "下载图集";
@@ -460,7 +469,7 @@ function prepareDownloadAllButton() {
   if (!downloadAllButton) return;
   downloadAllButton.disabled = false;
   downloadAllButton.textContent = "下载全部";
-  downloadAllButton.addEventListener("click", () => downloadCollection(activeCollection, downloadAllButton));
+  downloadAllButton.onclick = () => downloadCollection(activeCollection, downloadAllButton);
 }
 
 async function loadJSZip() {
@@ -514,7 +523,8 @@ function triggerBlobDownload(blob, fileName) {
     window.setTimeout(() => {
       link.click();
       link.remove();
-      URL.revokeObjectURL(objectUrl);
+      // 留出时间让浏览器接收下载，避免大文件或移动端下载被提前中断。
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
       resolve();
     }, 100);
   });
@@ -578,6 +588,14 @@ subtagTabs.addEventListener("click", (event) => {
 });
 
 gallery.addEventListener("click", (event) => {
+  const retryButton = event.target.closest("[data-retry-gallery]");
+  if (retryButton) {
+    retryButton.disabled = true;
+    retryButton.textContent = "加载中";
+    initGallery();
+    return;
+  }
+
   const downloadButton = event.target.closest("[data-download-collection-index]");
   if (downloadButton) {
     const collection = visibleCollections[Number(downloadButton.dataset.downloadCollectionIndex)];
