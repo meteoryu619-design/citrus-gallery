@@ -50,16 +50,21 @@ let activeImageIndex = 0;
 let visibleCollectionImageCount = IMAGE_BATCH_SIZE;
 let collectionDownloadInProgress = false;
 const pendingImageDownloads = new Map();
+let galleryLoaded = false;
+let galleryLoading = false;
+let collectionOpener = null;
+let imageOpener = null;
 
 async function initGallery() {
+  if (galleryLoading) return;
+  galleryLoading = true;
   renderCategories();
   prepareDownloadAllButton();
 
   try {
-    const response = await fetch("data/collections.json");
-    if (!response.ok) throw new Error("collections.json 加载失败");
-    const rawCollections = await response.json();
+    const rawCollections = await fetchResource("data/collections.json", "json");
     collections = rawCollections.map(normalizeCollection);
+    galleryLoaded = true;
     renderSubtags();
     renderGallery();
   } catch (error) {
@@ -71,6 +76,8 @@ async function initGallery() {
     `;
     emptyState.hidden = true;
     console.error(error);
+  } finally {
+    galleryLoading = false;
   }
 }
 
@@ -108,6 +115,7 @@ function renderSubtags() {
 }
 
 function renderGallery() {
+  if (!galleryLoaded) return;
   visibleCollections = collections
     .filter((collection) => {
       const categoryMatch = matchesActiveCategory(collection);
@@ -118,6 +126,7 @@ function renderGallery() {
     .sort(sortCollections);
 
   gallery.innerHTML = visibleCollections.map(renderCollectionCard).join("");
+  updateCollectionDownloadButtons();
   resultCount.textContent = `${visibleCollections.length} 个图集`;
   galleryMode.textContent =
     activeCategory === "All"
@@ -294,6 +303,7 @@ function matchesActiveCategory(collection) {
 function openCollection(index) {
   activeCollection = visibleCollections[index];
   if (!activeCollection) return;
+  collectionOpener = document.activeElement;
   visibleCollectionImageCount = IMAGE_BATCH_SIZE;
 
   collectionTitle.textContent = activeCollection.title;
@@ -307,6 +317,9 @@ function openCollection(index) {
   collectionModal.classList.add("is-open");
   collectionModal.setAttribute("aria-hidden", "false");
   document.body.classList.add("has-lightbox");
+  collectionModal.querySelector(".collection-panel").scrollTop = 0;
+  collectionModal.querySelector("[data-close-collection]").focus();
+  updateCollectionDownloadButtons();
 }
 
 function renderCollectionImages(reset = true) {
@@ -343,13 +356,16 @@ function renderCollectionImages(reset = true) {
 }
 
 function closeCollection() {
+  if (lightbox.classList.contains("is-open")) closeLightbox();
   collectionModal.classList.remove("is-open");
   collectionModal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("has-lightbox");
+  if (collectionOpener?.isConnected) collectionOpener.focus();
 }
 
 function openImage(index) {
-  if (!activeCollection) return;
+  if (!activeCollection?.images?.[index]) return;
+  imageOpener = document.activeElement;
   activeImageIndex = index;
   updateLightbox();
   lightbox.classList.add("is-open");
@@ -361,6 +377,8 @@ function openImage(index) {
 function closeLightbox() {
   lightbox.classList.remove("is-open");
   lightbox.setAttribute("aria-hidden", "true");
+  lightboxImage.removeAttribute("src");
+  if (imageOpener?.isConnected) imageOpener.focus();
   if (!collectionModal.classList.contains("is-open")) {
     document.body.classList.remove("has-lightbox");
   }
@@ -439,6 +457,7 @@ async function downloadCollection(collection, triggerButton) {
   if (!collection || !downloads.length || collectionDownloadInProgress) return;
 
   collectionDownloadInProgress = true;
+  updateCollectionDownloadButtons();
   const originalText = triggerButton?.textContent;
   if (triggerButton) {
     triggerButton.disabled = true;
@@ -453,11 +472,8 @@ async function downloadCollection(collection, triggerButton) {
       const downloadSrc = getDownloadSrc(collection, index);
       if (!downloadSrc) continue;
 
-      const response = await fetch(downloadSrc);
-      if (!response.ok) throw new Error(`${downloadSrc} 下载失败`);
-
       const fileName = `${safeFileName(collection.title)}-${index + 1}${getFileExtension(downloadSrc)}`;
-      zip.file(fileName, await response.blob());
+      zip.file(fileName, await fetchResource(downloadSrc));
 
       if (triggerButton) {
         triggerButton.textContent = `打包中 ${index + 1}/${downloads.length}...`;
@@ -475,14 +491,25 @@ async function downloadCollection(collection, triggerButton) {
       triggerButton.disabled = false;
       triggerButton.textContent = originalText || "下载图集";
     }
+    updateCollectionDownloadButtons();
   }
 }
 
 function prepareDownloadAllButton() {
   if (!downloadAllButton) return;
-  downloadAllButton.disabled = false;
-  downloadAllButton.textContent = "下载全部";
+  updateCollectionDownloadButtons();
   downloadAllButton.onclick = () => downloadCollection(activeCollection, downloadAllButton);
+}
+
+function updateCollectionDownloadButtons() {
+  gallery.querySelectorAll("[data-download-collection-index]").forEach((button) => {
+    const collection = visibleCollections[Number(button.dataset.downloadCollectionIndex)];
+    button.disabled = collectionDownloadInProgress || !collection?.downloads?.length;
+  });
+  if (downloadAllButton) {
+    downloadAllButton.disabled = collectionDownloadInProgress || !activeCollection?.downloads?.length;
+    downloadAllButton.textContent = collectionDownloadInProgress ? "正在打包图集" : "下载全部";
+  }
 }
 
 async function loadJSZip() {
@@ -494,7 +521,7 @@ async function loadJSZip() {
 
 function getImageThumb(image) {
   const source = typeof image === "string" ? image : image?.thumb || image?.src || "";
-  if (!source.startsWith("images/")) return source;
+  if (!source.startsWith("images/") || source.startsWith("images/thumbs/")) return source;
 
   const relativePath = source
     .slice("images/".length)
@@ -522,9 +549,7 @@ async function downloadUrlAsFile(url, fileName) {
   if (pendingImageDownloads.has(url)) return pendingImageDownloads.get(url);
 
   const download = (async () => {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`${url} 下载失败`);
-    const blob = await response.blob();
+    const blob = await fetchResource(url);
     await triggerBlobDownload(blob, fileName);
   })();
   pendingImageDownloads.set(url, download);
@@ -532,6 +557,18 @@ async function downloadUrlAsFile(url, fileName) {
     await download;
   } finally {
     pendingImageDownloads.delete(url);
+  }
+}
+
+async function fetchResource(url, type = "blob") {
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), type === "json" ? 30000 : 120000);
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) throw new Error(`${url} 加载失败`);
+    return await (type === "json" ? response.json() : response.blob());
+  } finally {
+    window.clearTimeout(timeout);
   }
 }
 
@@ -559,11 +596,13 @@ function getCategoryLabel(categoryId) {
 
 function formatDate(dateValue) {
   if (!dateValue) return "";
+  const date = new Date(`${dateValue}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return "";
   return new Intl.DateTimeFormat("zh-CN", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).format(new Date(`${dateValue}T00:00:00`));
+  }).format(date);
 }
 
 function getFileExtension(path) {
@@ -656,6 +695,20 @@ nextButton.addEventListener("click", () => showRelativeImage(1));
 downloadSingleButton.addEventListener("click", downloadSingle);
 
 document.addEventListener("keydown", (event) => {
+  const activeModal = lightbox.classList.contains("is-open")
+    ? lightbox
+    : collectionModal.classList.contains("is-open") ? collectionModal : null;
+  if (activeModal && event.key === "Tab") {
+    const buttons = [...activeModal.querySelectorAll("button:not(:disabled)")];
+    const first = buttons[0];
+    const last = buttons[buttons.length - 1];
+    if (!activeModal.contains(document.activeElement) ||
+        (event.shiftKey && document.activeElement === first) ||
+        (!event.shiftKey && document.activeElement === last)) {
+      event.preventDefault();
+      (event.shiftKey ? last : first)?.focus();
+    }
+  }
   if (lightbox.classList.contains("is-open")) {
     if (event.key === "Escape") closeLightbox();
     if (event.key === "ArrowLeft") showRelativeImage(-1);
