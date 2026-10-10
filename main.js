@@ -160,7 +160,7 @@ function renderCollectionCard(collection, index) {
             : ""
         }
         <span class="cover-fallback"${cover ? " hidden" : ""}>封面加载失败：路径错误</span>
-        <span class="featured-badge">精选</span>
+        ${collection.featured ? '<span class="featured-badge">精选</span>' : ""}
       </button>
       <div class="collection-body">
         <div class="collection-card-top">
