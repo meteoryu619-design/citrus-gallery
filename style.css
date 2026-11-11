@@ -377,6 +377,16 @@ h1::after {
   object-fit: cover;
 }
 
+.collection-cover[data-cover-id="meteoryu-gallery"] {
+  overflow: hidden;
+}
+
+.collection-cover[data-cover-id="meteoryu-gallery"] img {
+  object-position: center top;
+  transform: scale(1.8);
+  transform-origin: 65% 58%;
+}
+
 .cover-fallback {
   min-height: 220px;
   display: grid;
