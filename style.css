@@ -389,6 +389,10 @@ h1::after {
   object-position: center top;
 }
 
+.collection-cover[data-cover-id="meimei"] img {
+  object-position: center top;
+}
+
 .cover-fallback {
   min-height: 220px;
   display: grid;
